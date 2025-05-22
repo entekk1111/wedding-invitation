@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>우리의 청첩장</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
   <style>
     @keyframes openEnvelope {
       0% {
@@ -24,20 +27,31 @@
     .gallery img {
       object-fit: cover;
     }
+
+    .nanum-myeongjo-regular {
+      font-family: "Nanum Myeongjo", serif;
+      font-weight: 400;
+      font-style: normal;
+    }
   </style>
 </head>
-<body class="bg-pink-50 font-sans">
+<body class="bg-green-50 nanum-myeongjo-regular">
 
   <!-- 💌 봉투 영역 -->
   <div class="w-full max-w-md mx-auto mt-12 px-4">
-    <div id="envelope" class="overflow-hidden bg-white rounded-lg shadow-lg max-h-40 transition-all duration-700">
-      <!-- 닫힌 상태: 봉투 덮개 이미지나 색상 -->
-      <div class="bg-pink-300 h-40 flex items-center justify-center text-white text-2xl font-bold rounded-t-lg">
-        💌 청첩장 열기
+    <div id="envelope" class="overflow-hidden bg-white rounded-lg shadow-lg max-h-40 transition-all duration-700 relative">
+      
+      <!-- 닫힌 상태: 봉투 덮개 -->
+      <div class="bg-pink-300 h-40 flex items-center justify-center text-white text-2xl font-bold rounded-t-lg relative">
+        <!-- 중앙에 버튼 -->
+        <button onclick="openEnvelope()" class="absolute inset-0 flex items-center justify-center text-white text-xl font-semibold hover:scale-105 transition">
+          💌 청첩장 열기
+        </button>
       </div>
 
       <!-- 펼쳐진 내용 -->
       <div id="invitationContent" class="opacity-0 transition-opacity duration-700">
+
         <!-- 1. 인사말 -->
         <section class="px-4 py-6 text-center text-gray-700">
           소중한 분들을 저희의 특별한 날에 초대합니다.
@@ -54,32 +68,23 @@
           <img src="./images/main/B___2222.jpg" alt="대문사진" class="w-full object-cover rounded-lg shadow" />
         </section>
 
-        <!-- 4. 갤러리 (아이폰 스타일) -->
+        <!-- 4. 갤러리 -->
         <section class="mb-6 px-4">
-          
-        <div class="max-w-md mx-auto px-4 py-6">
-          <h1 class="text-2xl font-bold text-center text-pink-500 mb-4">📸 우리의 이야기</h1>
-          <div id="gallery" class="grid grid-cols-3 gap-2"></div>
-        </div>
-
-        <!-- 모달 -->
-        <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-          <div class="relative w-full max-w-md mx-auto bg-white rounded-lg p-4">
-            <!-- 닫기 버튼 -->
-            <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">&times;</button>
-
-            <!-- 메인 이미지 -->
-            <img id="modalImage" src="" class="w-full h-80 object-contain mb-2 rounded-md" />
-
-            <!-- 좌우 버튼 -->
-            <div class="absolute top-1/2 -translate-y-1/2 left-2 text-3xl cursor-pointer select-none text-white" onclick="prevImage()">&#10094;</div>
-            <div class="absolute top-1/2 -translate-y-1/2 right-2 text-3xl cursor-pointer select-none text-white" onclick="nextImage()">&#10095;</div>
-
-            <!-- 하단 썸네일 -->
-            <div id="modalThumbnails" class="flex gap-2 mt-2 overflow-x-auto"></div>
+          <div class="max-w-md mx-auto px-4 py-6">
+            <h1 class="text-2xl font-bold text-center text-pink-500 mb-4">📸 우리의 이야기</h1>
+            <div id="gallery" class="grid grid-cols-3 gap-2"></div>
           </div>
-        </div>
 
+          <!-- 모달 -->
+          <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+            <div class="relative w-full max-w-md mx-auto bg-white rounded-lg p-4">
+              <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">&times;</button>
+              <img id="modalImage" src="" class="w-full h-80 object-contain mb-2 rounded-md" />
+              <div class="absolute top-1/2 -translate-y-1/2 left-2 text-3xl cursor-pointer select-none text-green" onclick="prevImage()">&#10094;</div>
+              <div class="absolute top-1/2 -translate-y-1/2 right-2 text-3xl cursor-pointer select-none text-green" onclick="nextImage()">&#10095;</div>
+              <div id="modalThumbnails" class="flex gap-2 mt-2 overflow-x-auto"></div>
+            </div>
+          </div>
         </section>
 
         <!-- 5. 위치 -->
@@ -113,20 +118,22 @@
         </section>
       </div>
     </div>
-
-    <!-- 버튼 -->
-    <div class="text-center mt-6">
-      <button onclick="openEnvelope()" class="bg-pink-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-pink-600">
-        봉투 열기
-      </button>
-    </div>
   </div>
-  
+
   <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            handwritten: ['"Nanum Pen Script"', 'cursive']
+          }
+        }
+      }
+    }
+
     function openEnvelope() {
       const envelope = document.getElementById('envelope');
       const content = document.getElementById('invitationContent');
-
       envelope.classList.add('open');
       setTimeout(() => {
         content.classList.add('opacity-100');
@@ -134,32 +141,12 @@
       }, 1200);
     }
 
-    const gallery = document.getElementById('gallery');
-    const MAX_IMAGES = 9; // 최대 시도할 이미지 수
-    const IMAGE_FOLDER = './images/gallery/';
-    const IMAGE_PREFIX = 'img';
-    const IMAGE_EXT = '.jpg';
-
-    for (let i = 1; i <= MAX_IMAGES; i++) {
-      const img = new Image();
-      img.src = `${IMAGE_FOLDER}${IMAGE_PREFIX}${i}${IMAGE_EXT}`;
-      img.className = 'w-full h-24 object-cover rounded-lg';
-      
-      // 이미지가 존재하면 갤러리에 추가
-      img.onload = () => {
-        gallery.appendChild(img);
-      };
-
-      // 이미지가 없으면 무시 (콘솔도 안 띄움)
-      img.onerror = () => {};
-    }
-
     const galleryContainer = document.getElementById('gallery');
     const modal = document.getElementById('modal');
     const modalImage = document.getElementById('modalImage');
     const modalThumbnails = document.getElementById('modalThumbnails');
-
     const images = [];
+    const MAX_IMAGES = 20;
 
     for (let i = 1; i <= MAX_IMAGES; i++) {
       const src = `./images/gallery/img${i}.jpg`;
@@ -169,8 +156,6 @@
       img.onload = () => {
         const index = images.length;
         images.push(src);
-
-        // 메인 갤러리 썸네일
         const thumb = document.createElement('img');
         thumb.src = src;
         thumb.className = 'w-full h-24 object-cover rounded cursor-pointer';
@@ -215,9 +200,6 @@
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       updateModal();
     }
-
-    
   </script>
-
 </body>
 </html>
