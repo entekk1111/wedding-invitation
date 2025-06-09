@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>우리의 결혼식</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Dancing Script 폰트는 그대로 유지하여 캘리그라피에 사용 -->
+    <!-- Dancing Script 폰트는 그대로 유지하여 캘igraphy에 사용 -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="./style.css">
 </head>
 <body class="bg-white text-gray-800">
 
-  <!-- 사진 + 캘리그라피 텍스트 -->
+  <!-- 사진 + 캘igraphy 텍스트 -->
   <!-- class="scroll-reveal" 유지 -->
   <section class="relative text-center scroll-reveal">
-    <img src="./images/main/img4.jpg" alt="커플 사진" class="mx-auto w-full max-w-md" />
+    <!-- id="mainImage" 추가 -->
+    <img id="mainImage" src="./images/main/img4.jpg" alt="커플 사진" class="mx-auto w-full max-w-md" />
+    <!-- ------------------- -->
     <h2 id="typingText"
         class="absolute left-1/2 transform -translate-x-1/2
                text-white text-l script-font drop-shadow-lg whitespace-nowrap" style="padding-bottom: 200px;">
+      <!-- 내용을 비워둡니다. JavaScript가 채울 예정입니다. -->
+    </h2>
+    <!-- ------------------------------------------- -->
   </section>
-  <!-- ★------------------------------------------------- ★ -->
 
     <!-- class="scroll-reveal" 유지 -->
     <div class="max-w-md mx-auto pb-10 pb-1 0 scroll-reveal">
@@ -31,7 +35,7 @@
         </header>
     </div>
 
-    <!-- class="scroll-reveal" 유지 -->
+    <!-- '우리의 약속' 섹션 (배경색 유지) - class="scroll-reveal" 유지 -->
     <section class="p-6 my-3 py-20 text-center scroll-reveal" style="background-color: rgba(152, 202, 169, 0.471);">
         <img src="./images/icons/leaf.png" alt="작은 나뭇잎 그림" class="mx-auto w-10 h-10 mb-4">
         <p class="text-s text-gray-700 leading-relaxed noto-serif-kr-regular">
@@ -71,12 +75,14 @@
 
 
     <!-- Lightbox 모달 -->
-    <div id="lightboxModal" class="hidden">
+    <!-- ★ class="hidden" 제거 ★ -->
+    <div id="lightboxModal">
         <button id="closeLightbox">&times;</button>
         <img id="lightboxImage" src="" alt="Gallery Image">
         <button id="prevImage">&lt;</button>
         <button id="nextImage">&gt;</button>
     </div>
+    <!-- ★------------------- ★ -->
 
 
     <!-- 마음 전하실 곳 + 푸터 감싸는 div - class="scroll-reveal" 유지 -->

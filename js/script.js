@@ -1,79 +1,69 @@
 // js/script.js 파일
 
-// 타이핑 효과 스크립트 복원 및 수정
-// 첫 번째 텍스트와 두 번째 텍스트 정의
+// 타이핑 효과 스크립트
 const text1 = "가을에 바람이 불면\n더 깊어진 눈빛으로\n당신을 사랑한다고 말하겠습니다.\n- 가을에, 이해인 -";
 const text2 = "저희, 결혼합니다.";
 const el = document.getElementById("typingText");
 
-let typingIndex = 0; // 현재 타이핑 중인 인덱스
-let currentText = text1; // 현재 타이핑할 텍스트 (text1 또는 text2)
+let typingIndex = 0;
+let currentText = text1;
 
 
 function typeCharacter() {
     if (typingIndex < currentText.length) {
         let char = currentText.charAt(typingIndex);
-        // \n 문자를 만났을 때 <br> 태그로 변환하여 추가
         if (char === '\n') {
             el.innerHTML += '<br>';
         } else {
             el.innerHTML += char;
         }
         typingIndex++;
-        // 다음 글자 타이핑을 예약
-        setTimeout(typeCharacter, 120); // 타이핑 속도 (120ms)
+        setTimeout(typeCharacter, 120);
     } else {
-        // 현재 텍스트의 타이핑이 모두 끝났을 때
         if (currentText === text1) {
-            // 첫 번째 텍스트가 끝났으면 잠시 대기 후 페이드아웃 및 다음 텍스트 준비
-            setTimeout(fadeOutAndTypeNext, 1000); // 1초 대기 후 fadeOutAndTypeNext 호출
+            setTimeout(fadeOutAndTypeNext, 1000);
         } else if (currentText === text2) {
-            // 두 번째 텍스트가 끝났으면 타이핑 애니메이션 종료
-            console.log("두 번째 텍스트 타이핑 완료"); // 콘솔에 완료 메시지 출력 (디버깅용)
-            // 여기서 더 이상 할 일이 없으면 함수 종료
+            console.log("두 번째 텍스트 타이핑 완료");
         }
     }
 }
 
-// 페이드아웃 애니메이션을 시작하고 다음 텍스트 타이핑을 준비하는 함수
 function fadeOutAndTypeNext() {
-    // 요소에 'fade-out' 클래스를 추가하여 CSS 페이드아웃 애니메이션 발동
     el.classList.add('fade-out');
-
-    // CSS 트랜지션 시간(0.6초)보다 약간 길게 기다린 후 다음 단계 실행
     setTimeout(() => {
-        // 페이드아웃 애니메이션이 끝난 후
-        el.classList.remove('fade-out'); // 'fade-out' 클래스 제거 (투명도 원래대로 복구)
-        el.innerHTML = ''; // 현재 표시된 텍스트 내용을 지움
+        el.classList.remove('fade-out');
+        el.innerHTML = '';
 
-        // ★ 텍스트 크기 변경
-        el.classList.remove('text-l'); // 기존 크기 클래스 제거
-        el.classList.add('text-2xl'); // 새로운 크기 클래스 추가
+        // 텍스트 크기 변경
+        el.classList.remove('text-l');
+        el.classList.add('text-2xl');
 
-        typingIndex = 0; // 타이핑 인덱스 초기화
-        currentText = text2; // 다음 타이핑할 텍스트를 text2로 설정
-
-        // 이제 두 번째 텍스트 타이핑 시작
+        typingIndex = 0;
+        currentText = text2;
         typeCharacter();
-    }, 700); // 0.6초(CSS transition) + 0.1초 여유 = 0.7초 대기
+    }, 700);
 }
 
-// 초기 타이핑 시작 함수 (DOMContentLoaded에서 호출)
 function startTyping(textToType) {
     currentText = textToType;
     typingIndex = 0;
-    el.innerHTML = ''; // Clear current text before starting
-    // Fade-out 클래스가 남아있을 경우 제거 (만약 이전 애니메이션이 중단됐다면)
+    el.innerHTML = '';
     el.classList.remove('fade-out');
-    // ★ 첫 번째 텍스트는 기본 크기(text-4xl)로 시작 ★
-    el.classList.add('text-l'); // 첫 번째 텍스트는 text-4xl로 시작
-    // ★----------------------------------------- ★
+    // 첫 번째 텍스트는 기본 크기(text-l)로 시작
+    el.classList.remove('text-2xl');
+    el.classList.add('text-l');
 
-    typeCharacter(); // 타이핑 프로세스 시작
+    // 메인 이미지 가져오기 및 페이드인 시작
+    const mainImage = document.getElementById('mainImage');
+    if (mainImage) {
+        mainImage.style.opacity = 1;
+    }
+
+    typeCharacter();
 }
 
 
-// 갤러리 및 Lightbox 스크립트 (나머지 코드는 동일)
+// 갤러리 및 Lightbox 스크립트
 const galleryGrid = document.getElementById('galleryGrid');
 const lightboxModal = document.getElementById('lightboxModal');
 const lightboxImage = document.getElementById('lightboxImage');
@@ -88,60 +78,82 @@ for (let i = 1; i <= 40; i++) {
 }
 
 let currentImageIndex = 0;
+let isTransitioning = false; // 애니메이션 중복 방지 플래그
 
-// 갤러리 썸네일을 화면에 표시하는 함수 (첫 9개만 표시)
 function displayGallery() {
-    galleryGrid.innerHTML = ''; // 기존 내용을 비웁니다
-    const numberOfThumbnailsToShow = 9; // 화면에 보여줄 썸네일 개수
+    galleryGrid.innerHTML = '';
+    const numberOfThumbnailsToShow = 9;
 
-    // images 배열의 첫 9개 항목만 순회합니다 (실제 이미지 개수가 9개 미만일 경우 그만큼만)
     for (let i = 0; i < numberOfThumbnailsToShow && i < images.length; i++) {
-    const imagePath = images[i];
-    const img = document.createElement('img');
-    img.src = imagePath;
-    img.alt = `Gallery Image ${i + 1}`; // 대체 텍스트
-    img.dataset.index = i; // 클릭 시 Lightbox에서 사용할 전체 이미지 목록에서의 인덱스
-    galleryGrid.appendChild(img);
+        const imagePath = images[i];
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = `Gallery Image ${i + 1}`;
+        img.dataset.index = i;
+        galleryGrid.appendChild(img);
     }
 }
 
-// Lightbox 모달을 여는 함수
 function openLightbox(index) {
     currentImageIndex = index;
-    lightboxImage.src = images[currentImageIndex];
-    lightboxModal.classList.add('visible'); // visible 클래스 추가하여 보이게 함
-    // body 스크롤 방지 (선택 사항)
-    document.body.style.overflow = 'hidden';
+    lightboxImage.src = images[currentImageIndex]; // 첫 이미지 로드
+    lightboxModal.classList.add('visible'); // CSS visible 클래스 추가하여 보이게 함
+    document.body.style.overflow = 'hidden'; // body 스크롤 방지
+    addSwipeListeners(); // Lightbox 열릴 때 스와이프 리스너 추가
+    isTransitioning = false; // 모달 열릴 때 트랜지션 상태 초기화
+    lightboxImage.classList.remove('image-fade-out'); // 혹시 모를 잔여 페이드아웃 클래스 제거
 }
 
-// Lightbox 모달을 닫는 함수
 function closeLightbox() {
-    lightboxModal.classList.remove('visible'); // visible 클래스 제거하여 숨김
-    // body 스크롤 허용 (선택 사항)
-    document.body.style.overflow = '';
+    lightboxModal.classList.remove('visible'); // CSS visible 클래스 제거하여 숨김
+    document.body.style.overflow = ''; // body 스크롤 허용
+    removeSwipeListeners(); // Lightbox 닫힐 때 스와이프 리스너 제거
 }
 
-// 다음 이미지를 보여주는 함수
+// 다음 이미지 보여주기 함수 (애니메이션 적용)
 function showNextImage() {
-    currentImageIndex = (currentImageIndex + 1) % images.length; // 마지막 사진에서 처음으로
-    lightboxImage.src = images[currentImageIndex];
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    lightboxImage.classList.add('image-fade-out'); // 페이드아웃 시작
+
+    setTimeout(() => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        lightboxImage.src = images[currentImageIndex];
+
+        lightboxImage.classList.remove('image-fade-out');
+
+        isTransitioning = false;
+    }, 300); // CSS transition 시간과 일치 또는 약간 길게 설정 (ms)
 }
 
-// 이전 이미지를 보여주는 함수
+// 이전 이미지 보여주기 함수 (애니메이션 적용)
 function showPrevImage() {
-    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // 처음 사진에서 마지막으로
-    lightboxImage.src = images[currentImageIndex];
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    lightboxImage.classList.add('image-fade-out'); // 페이드아웃 시작
+
+    setTimeout(() => {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        lightboxImage.src = images[currentImageIndex];
+
+        lightboxImage.classList.remove('image-fade-out');
+
+        isTransitioning = false;
+    }, 300); // CSS transition 시간과 일치 또는 약간 길게 설정 (ms)
 }
+
 
 // 갤러리 이벤트 리스너 연결
 galleryGrid.addEventListener('click', (e) => {
     if (e.target.tagName === 'IMG') {
-    const index = parseInt(e.target.dataset.index);
-    openLightbox(index);
+        const index = parseInt(e.target.dataset.index);
+        openLightbox(index);
     }
 });
 
-// Lightbox 이벤트 리스너 연결
+// Lightbox 버튼 이벤트 리스너 연결
 closeLightboxBtn.addEventListener('click', closeLightbox);
 prevImageBtn.addEventListener('click', showPrevImage);
 nextImageBtn.addEventListener('click', showNextImage);
@@ -149,15 +161,60 @@ nextImageBtn.addEventListener('click', showNextImage);
 // 키보드 방향키로 이동 (선택 사항)
 document.addEventListener('keydown', (e) => {
     if (lightboxModal.classList.contains('visible')) {
-    if (e.key === 'ArrowRight') {
-        showNextImage();
-    } else if (e.key === 'ArrowLeft') {
-        showPrevImage();
-    } else if (e.key === 'Escape') {
-        closeLightbox();
-    }
+        if (e.key === 'ArrowRight') {
+            showNextImage();
+        } else if (e.key === 'ArrowLeft') {
+            showPrevImage();
+        } else if (e.key === 'Escape') {
+            closeLightbox();
+        }
     }
 });
+
+
+// 스와이프 기능 관련 JavaScript
+let touchStartX = 0;
+let touchEndX = 0;
+const swipeThreshold = 50; // 스와이프로 인식할 최소 이동 거리 (px)
+
+function handleTouchStart(e) {
+    if (isTransitioning) return;
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchMove(e) {
+    if (isTransitioning) return;
+    touchEndX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd() {
+    if (isTransitioning) return;
+
+    const deltaX = touchEndX - touchStartX;
+
+    if (Math.abs(deltaX) > swipeThreshold) {
+        if (deltaX > 0) { // 오른쪽으로 스와이프 (이전 사진)
+            showPrevImage();
+        } else { // 왼쪽으로 스와이프 (다음 사진)
+            showNextImage();
+        }
+    }
+    touchStartX = 0;
+    touchEndX = 0;
+}
+
+// Lightbox 이미지에 터치 이벤트 리스너를 추가/제거하는 함수
+function addSwipeListeners() {
+    lightboxImage.addEventListener('touchstart', handleTouchStart, { passive: true });
+    lightboxImage.addEventListener('touchmove', handleTouchMove, { passive: true });
+    lightboxImage.addEventListener('touchend', handleTouchEnd);
+}
+
+function removeSwipeListeners() {
+    lightboxImage.removeEventListener('touchstart', handleTouchStart);
+    lightboxImage.removeEventListener('touchmove', handleTouchMove);
+    lightboxImage.removeEventListener('touchend', handleTouchEnd);
+}
 
 
 // 스크롤 리빌 애니메이션 JavaScript
@@ -165,7 +222,7 @@ const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
 
 function isInViewport(element) {
     const rect = element.getBoundingClientRect();
-    const offset = 100; // 화면 하단에서 요소가 나타나기 시작할 여유 공간
+    const offset = 100;
     return (
         rect.top < window.innerHeight - offset &&
         rect.bottom > 0
@@ -177,7 +234,6 @@ function revealOnScroll() {
         if (!element.classList.contains('visible') && isInViewport(element)) {
             element.classList.add('visible');
         }
-        // 선택 사항: 화면 밖으로 나갈 때 visible 클래스 제거하려면 아래 주석 해제
         // else if (element.classList.contains('visible') && !isInViewport(element) && rect.bottom < 0) {
         //     element.classList.remove('visible');
         // }
@@ -187,12 +243,12 @@ function revealOnScroll() {
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
     // 페이지 로드 시 첫 번째 텍스트 타이핑 시작
-    startTyping(text1); // startTyping 함수 내부에서 크기 설정
+    startTyping(text1); // startTyping 함수 내부에서 메인 이미지 페이드인 시작
 
     // 갤러리 표시 (이제 9개만)
     displayGallery();
 
     // 스크롤 리빌 초기 실행 및 이벤트 리스너 등록
-    revealOnScroll(); // 페이지 로드 시 이미 보이는 요소 처리
-    window.addEventListener('scroll', revealOnScroll); // 스크롤 이벤트에 함수 연결
+    revealOnScroll();
+    window.addEventListener('scroll', revealOnScroll);
 });
