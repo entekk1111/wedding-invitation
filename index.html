@@ -1,205 +1,106 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>우리의 청첩장</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
-  <style>
-    @keyframes openEnvelope {
-      0% {
-        max-height: 160px;
-        opacity: 0.5;
-      }
-      100% {
-        max-height: 3000px;
-        opacity: 1;
-      }
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>우리의 결혼식</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Dancing Script 폰트는 그대로 유지하여 캘리그라피에 사용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-    .open {
-      animation: openEnvelope 1.2s ease forwards;
-    }
-
-    .gallery img {
-      object-fit: cover;
-    }
-
-    .nanum-myeongjo-regular {
-      font-family: "Nanum Myeongjo", serif;
-      font-weight: 400;
-      font-style: normal;
-    }
-  </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
-<body class="bg-green-50 nanum-myeongjo-regular">
+<body class="bg-white text-gray-800">
 
-  <!-- 💌 봉투 영역 -->
-  <div class="w-full max-w-md mx-auto mt-12 px-4">
-    <div id="envelope" class="overflow-hidden bg-white rounded-lg shadow-lg max-h-40 transition-all duration-700 relative">
-      
-      <!-- 닫힌 상태: 봉투 덮개 -->
-      <div class="bg-pink-300 h-40 flex items-center justify-center text-white text-2xl font-bold rounded-t-lg relative">
-        <!-- 중앙에 버튼 -->
-        <button onclick="openEnvelope()" class="absolute inset-0 flex items-center justify-center text-white text-xl font-semibold hover:scale-105 transition">
-          💌 청첩장 열기
-        </button>
-      </div>
+  <!-- 사진 + 캘리그라피 텍스트 -->
+  <!-- class="scroll-reveal" 유지 -->
+  <section class="relative text-center scroll-reveal">
+    <img src="./images/main/img4.jpg" alt="커플 사진" class="mx-auto w-full max-w-md" />
+    <h2 id="typingText"
+        class="absolute left-1/2 transform -translate-x-1/2
+               text-white text-xl script-font drop-shadow-lg whitespace-nowrap" style="padding-bottom: 200px;">
+  </section>
+  <!-- ★------------------------------------------------- ★ -->
 
-      <!-- 펼쳐진 내용 -->
-      <div id="invitationContent" class="opacity-0 transition-opacity duration-700">
-
-        <!-- 1. 인사말 -->
-        <section class="px-4 py-6 text-center text-gray-700">
-          소중한 분들을 저희의 특별한 날에 초대합니다.
-        </section>
-
-        <!-- 2. 제목 -->
-        <section class="px-4 text-center mb-4">
-          <h2 class="text-2xl font-bold text-pink-600">우리 결혼합니다</h2>
-          <p class="text-gray-500 mt-1">2025년 10월 10일</p>
-        </section>
-
-        <!-- 3. 대문사진 -->
-        <section class="mb-6">
-          <img src="./images/main/B___2222.jpg" alt="대문사진" class="w-full object-cover rounded-lg shadow" />
-        </section>
-
-        <!-- 4. 갤러리 -->
-        <section class="mb-6 px-4">
-          <div class="max-w-md mx-auto px-4 py-6">
-            <h1 class="text-2xl font-bold text-center text-pink-500 mb-4">📸 우리의 이야기</h1>
-            <div id="gallery" class="grid grid-cols-3 gap-2"></div>
-          </div>
-
-          <!-- 모달 -->
-          <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-            <div class="relative w-full max-w-md mx-auto bg-white rounded-lg p-4">
-              <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">&times;</button>
-              <img id="modalImage" src="" class="w-full h-80 object-contain mb-2 rounded-md" />
-              <div class="absolute top-1/2 -translate-y-1/2 left-2 text-3xl cursor-pointer select-none text-green" onclick="prevImage()">&#10094;</div>
-              <div class="absolute top-1/2 -translate-y-1/2 right-2 text-3xl cursor-pointer select-none text-green" onclick="nextImage()">&#10095;</div>
-              <div id="modalThumbnails" class="flex gap-2 mt-2 overflow-x-auto"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5. 위치 -->
-        <section class="px-4 mb-6">
-          <h3 class="text-lg font-semibold text-pink-500 mb-1">오시는 길</h3>
-          <p class="text-gray-600">서울시 강남구 어딘가웨딩홀</p>
-          <div class="mt-2">
-            <iframe class="w-full h-48 rounded-lg" src="https://maps.google.com/maps?q=seoul&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
-          </div>
-        </section>
-
-        <!-- 6. 주차 안내 -->
-        <section class="px-4 mb-6">
-          <h3 class="text-lg font-semibold text-pink-500 mb-1">주차 안내</h3>
-          <p class="text-gray-600">지하 2층 무료 주차 가능합니다.</p>
-        </section>
-
-        <!-- 7. 계좌번호 -->
-        <section class="px-4 mb-6">
-          <h3 class="text-lg font-semibold text-pink-500 mb-1">마음을 전하실 곳</h3>
-          <div class="text-gray-700 text-sm space-y-1">
-            <p>👰 신부 : 신한 110-123-456789 (홍길순)</p>
-            <p>🤵 신랑 : 국민 123-456-789012 (김철수)</p>
-          </div>
-        </section>
-
-        <!-- 8. 마무리 인사 -->
-        <section class="px-4 pb-6 text-center text-gray-600 text-sm">
-          참석해주시는 모든 분들께 감사드립니다.<br />
-          따뜻한 축복 부탁드립니다.
-        </section>
-      </div>
+    <!-- class="scroll-reveal" 유지 -->
+    <div class="max-w-md mx-auto pb-10 pb-1 0 scroll-reveal">
+        <header class="text-center">
+            <h1 class="text-2xl font-bold my-5 nanum-myeongjo-regular">박 수 현 & 김 다 미</h1>
+            <p class="text-base mt-3">2025.11.09(일) 오후 12시</p>
+            <p class="text-base text-gray-600">전주 향교 명륜당</p>
+        </header>
     </div>
-  </div>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            handwritten: ['"Nanum Pen Script"', 'cursive']
-          }
-        }
-      }
-    }
+    <!-- class="scroll-reveal" 유지 -->
+    <section class="p-6 my-3 py-10 text-center scroll-reveal" style="background-color: rgba(86, 145, 106, 0.471);">
+      <h2 class="text-xl font-semibold mb-4">우리의 약속</h2>
+      <p class="text-s text-gray-700 leading-relaxed">
+        하늘 아래 푸른 약속 하나,<br>
+        서로의 눈빛 속에 새기며.<br>
+        같은 길을 걷기로 합니다.<br>
+        <br>
+        때로는 바람이 불고<br>
+        때로는 햇살이 비추어도,<br>
+        언제나 당신 곁에,<br>
+        변함없는 사랑으로.<br>
+        <br>
+        함께 웃고 함께 울며<br>
+        아름다운 이야기 만들어가요.<br>
+        영원히, 오늘처럼 설레는 마음으로.
+      </p>
+    </section>
 
-    function openEnvelope() {
-      const envelope = document.getElementById('envelope');
-      const content = document.getElementById('invitationContent');
-      envelope.classList.add('open');
-      setTimeout(() => {
-        content.classList.add('opacity-100');
-        content.classList.remove('opacity-0');
-      }, 1200);
-    }
 
-    const galleryContainer = document.getElementById('gallery');
-    const modal = document.getElementById('modal');
-    const modalImage = document.getElementById('modalImage');
-    const modalThumbnails = document.getElementById('modalThumbnails');
-    const images = [];
-    const MAX_IMAGES = 20;
+    <!-- 갤러리 섹션 (제목: 사진첩, 썸네일 9개) - class="scroll-reveal" 유지 -->
+    <section class="max-w-md mx-auto p-6 scroll-reveal">
+        <h2 class="text-2xl font-bold text-center mb-6">사진첩</h2>
 
-    for (let i = 1; i <= MAX_IMAGES; i++) {
-      const src = `./images/gallery/img${i}.jpg`;
-      const img = new Image();
-      img.src = src;
+        <div id="galleryGrid">
+            <!-- JavaScript로 첫 9개의 이미지가 여기에 추가됩니다 -->
+        </div>
+    </section>
 
-      img.onload = () => {
-        const index = images.length;
-        images.push(src);
-        const thumb = document.createElement('img');
-        thumb.src = src;
-        thumb.className = 'w-full h-24 object-cover rounded cursor-pointer';
-        thumb.onclick = () => openModal(index);
-        galleryContainer.appendChild(thumb);
-      };
-    }
 
-    let currentIndex = 0;
+    <!-- Location 섹션 (제목: 장소, 네이버 지도 API 사용) - class="scroll-reveal" 유지 -->
+    <section class="max-w-md mx-auto p-6 text-center scroll-reveal">
+        <h2 class="text-2xl font-semibold mb-4">장소</h2>
+        <p class="text-sm text-gray-600 mb-4">전북 전주시 완산구 향교길 139 전주향교</p>
 
-    function openModal(index) {
-      currentIndex = index;
-      modal.classList.remove('hidden');
-      updateModal();
-    }
+        <div id="map"></div>
 
-    function closeModal() {
-      modal.classList.add('hidden');
-    }
+        <!-- 네이버 지도 링크 (필요하다면 유지) -->
+        <a href="https://map.naver.com/p/entry/place/11593301?c=15.00,0,0,0,dh" target="_blank" class="text-blue-600 underline mt-4 inline-block">네이버 지도 크게 보기</a>
+    </section>
 
-    function updateModal() {
-      modalImage.src = images[currentIndex];
-      modalThumbnails.innerHTML = '';
-      images.forEach((src, i) => {
-        const t = document.createElement('img');
-        t.src = src;
-        t.className = `w-16 h-16 object-cover rounded cursor-pointer ${i === currentIndex ? 'ring-2 ring-pink-400' : ''}`;
-        t.onclick = () => {
-          currentIndex = i;
-          updateModal();
-        };
-        modalThumbnails.appendChild(t);
-      });
-    }
 
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      updateModal();
-    }
+    <!-- Lightbox 모달 -->
+    <div id="lightboxModal" class="hidden">
+        <button id="closeLightbox">&times;</button>
+        <img id="lightboxImage" src="" alt="Gallery Image">
+        <button id="prevImage">&lt;</button>
+        <button id="nextImage">&gt;</button>
+    </div>
 
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updateModal();
-    }
-  </script>
+
+    <!-- 마음 전하실 곳 + 푸터 감싸는 div - class="scroll-reveal" 유지 -->
+    <div class="max-w-md mx-auto p-6 space-y-6 scroll-reveal">
+        <section class="text-center">
+        <h2 class="text-xl font-semibold">마음 전하실 곳</h2>
+        <p class="text-sm text-gray-600">신랑 계좌: 국민은행 123456-78-901234</p>
+        <p class="text-sm text-gray-600">신부 계좌: 신한은행 987654-32-109876</p>
+        </section>
+
+        <footer class="text-center text-xs text-gray-400 mt-8">
+        © 2025 박수현 & 김다미
+        </footer>
+    </div>
+
+
+    <!-- 네이버 지도 API 스크립트 -->
+    <!-- ★ ncpKeyId="YOUR_NCP_CLIENT_ID" 부분을 실제 Client ID로 변경하세요 ★ -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=29a2dkkzzf"></script>
+    <script src="./js/naverMapApi.js"></script>
+    <script src="./js/script.js"></script>
+
 </body>
 </html>
