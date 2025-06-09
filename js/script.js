@@ -1,8 +1,8 @@
 // js/script.js 파일
 
-// ★ 타이핑 효과 스크립트 수정 ★
+// 타이핑 효과 스크립트 복원 및 수정
 // 첫 번째 텍스트와 두 번째 텍스트 정의
-const text1 = "가을에 바람이 불면\n더 깊어진 눈빛으로\n당신을 사랑한다고 말하겠습니다\n- 가을에, 이해인 -";
+const text1 = "가을에 바람이 불면\n더 깊어진 눈빛으로\n당신을 사랑한다고 말하겠습니다.\n- 가을에, 이해인 -";
 const text2 = "저희, 결혼합니다.";
 const el = document.getElementById("typingText");
 
@@ -45,6 +45,11 @@ function fadeOutAndTypeNext() {
         // 페이드아웃 애니메이션이 끝난 후
         el.classList.remove('fade-out'); // 'fade-out' 클래스 제거 (투명도 원래대로 복구)
         el.innerHTML = ''; // 현재 표시된 텍스트 내용을 지움
+
+        // ★ 텍스트 크기 변경
+        el.classList.remove('text-l'); // 기존 크기 클래스 제거
+        el.classList.add('text-2xl'); // 새로운 크기 클래스 추가
+
         typingIndex = 0; // 타이핑 인덱스 초기화
         currentText = text2; // 다음 타이핑할 텍스트를 text2로 설정
 
@@ -57,13 +62,18 @@ function fadeOutAndTypeNext() {
 function startTyping(textToType) {
     currentText = textToType;
     typingIndex = 0;
-    el.innerHTML = ''; // 시작 전에 내용을 확실히 비웁니다.
+    el.innerHTML = ''; // Clear current text before starting
+    // Fade-out 클래스가 남아있을 경우 제거 (만약 이전 애니메이션이 중단됐다면)
+    el.classList.remove('fade-out');
+    // ★ 첫 번째 텍스트는 기본 크기(text-4xl)로 시작 ★
+    el.classList.add('text-l'); // 첫 번째 텍스트는 text-4xl로 시작
+    // ★----------------------------------------- ★
+
     typeCharacter(); // 타이핑 프로세스 시작
 }
-// ★------------------------------------------------- ★
 
 
-// 갤러리 및 Lightbox 스크립트
+// 갤러리 및 Lightbox 스크립트 (나머지 코드는 동일)
 const galleryGrid = document.getElementById('galleryGrid');
 const lightboxModal = document.getElementById('lightboxModal');
 const lightboxImage = document.getElementById('lightboxImage');
@@ -177,7 +187,7 @@ function revealOnScroll() {
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
     // 페이지 로드 시 첫 번째 텍스트 타이핑 시작
-    startTyping(text1);
+    startTyping(text1); // startTyping 함수 내부에서 크기 설정
 
     // 갤러리 표시 (이제 9개만)
     displayGallery();
@@ -186,13 +196,3 @@ window.addEventListener("DOMContentLoaded", () => {
     revealOnScroll(); // 페이지 로드 시 이미 보이는 요소 처리
     window.addEventListener('scroll', revealOnScroll); // 스크롤 이벤트에 함수 연결
 });
-
-// Helper function to start typing any text (used internally)
-function startTyping(textToType) {
-    currentText = textToType;
-    typingIndex = 0;
-    el.innerHTML = ''; // Clear current text before starting
-    // Fade-out 클래스가 남아있을 경우 제거 (만약 이전 애니메이션이 중단됐다면)
-    el.classList.remove('fade-out');
-    typeCharacter(); // 타이핑 프로세스 시작
-}

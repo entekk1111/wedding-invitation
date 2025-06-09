@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Serif+KR:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Nanum+Myeongjo&family=Noto+Serif+KR:wght@200..900&family=Stylish&display=swap');
 
 body {
   font-family: "Nanum Myeongjo", serif; /* 나눔명조를 기본 폰트로 설정 */
@@ -9,6 +9,53 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+.nanum-myeongjo-bold {
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.nanum-myeongjo-extrabold {
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.noto-serif-kr-regular {
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.noto-serif-kr-bold {
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.gowun-batang-regular {
+  font-family: "Gowun Batang", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.gowun-batang-bold {
+  font-family: "Gowun Batang", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.stylish-regular {
+  font-family: "Stylish", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
 
 /* typingText 위치 조정 스타일 */
 #typingText {
