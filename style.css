@@ -66,8 +66,6 @@ body {
 /* typingText 위치 조정 스타일 */
 #typingText {
     top: 20%; /* 이 값을 조절하여 위/아래 위치를 변경합니다 */
-    /* left: 50%; transform: translateX(-50%); 는 HTML 클래스에서 유지됩니다. */
-    /* 투명도 전환 효과 추가 */
     transition: opacity 0.6s ease-out;
     will-change: opacity; /* 애니메이션 성능 최적화 힌트 */
 }
@@ -77,6 +75,15 @@ body {
     opacity: 0;
 }
 
+/* 갤러리 섹션 안내 문구 글씨 크기 축소 */
+.gallery-instruction {
+    font-size: 0.875rem; /* Tailwind의 text-sm (14px)에 해당 */
+    color: #6b7280; /* text-gray-700과 유사하게 */
+    margin-top: -1.5rem; /* 제목과 간격 조절 */
+    display: block; /* 줄바꿈을 위해 블록 요소로 */
+    text-align: center; /* 가운데 정렬 */
+    margin-bottom: 1rem; /* 갤러리 그리드와의 간격 */
+}
 
 /* 갤러리 그리드 스타일 (아이폰처럼 간격 조절) */
 #galleryGrid {
@@ -92,91 +99,84 @@ body {
     cursor: pointer; /* 클릭 가능한 모양으로 표시 */
 }
 
-/* ★ Lightbox 모달 스타일 수정 ★ */
-#lightboxModal {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* "더보기" 버튼 스타일 */
+#loadMoreBtn {
+    display: block;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding-top: 0.75rem; /* py-3에 해당 */
+    padding-bottom: 0.75rem; /* py-3에 해당 */
+    margin-top: 1.5rem; /* mt-6에 해당 */
+    /* background-color: #f3f4f6; Tailwind의 bg-gray-100 - 제거됨 */
+    color: #2d3748; /* Tailwind의 text-gray-800 */
+    font-size: 1.125rem; /* Tailwind의 text-lg */
+    font-weight: 600; /* Tailwind의 font-semibold */
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: background-color 0.3s ease-in-out; /* transition duration-300 ease-in-out */
+    cursor: pointer;
+    text-align: center; /* 아이콘과 텍스트 가운데 정렬 */
+    border: none; /* 버튼 기본 테두리 제거 */
+    background-color: transparent; /* 배경색 투명하게 */
+}
+
+#loadMoreBtn:hover {
+    background-color: #e5e7eb; /* Tailwind의 hover:bg-gray-200 */
+}
+
+
+/* Lightbox 모달 스타일 수정 */
+#lightboxModal {
+    /* Tailwind 클래스 활용 (index.html에서 bg-white bg-opacity-90 flex items-center justify-center로 변경) */
     z-index: 100;
-
-    /* ★ 기본 상태: 완전히 숨김 및 인터랙션 방지 ★ */
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    /* ★------------------------------------- ★ */
-
-    /* visible 클래스가 추가될 때만 트랜지션 적용 */
+    /* 기본 상태: 완전히 숨김 및 인터랙션 방지 (Tailwind의 hidden 클래스 활용) */
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* visibility 트랜지션 추가 */
+    background-color: white; /* 배경색을 흰색으로 변경 */
+    opacity: 0; /* 초기에는 투명하게 */
+    visibility: hidden; /* 초기에는 숨김 */
+    pointer-events: none; /* 초기에는 클릭 불가 */
 }
 #lightboxModal.visible {
-    /* ★ visible 상태: 보이게 하고 인터랙션 허용 ★ */
+    /* visible 상태: 보이게 하고 인터랙션 허용 (Tailwind의 flex 클래스 활용) */
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    /* ★------------------------------------ ★ */
-
-    /* transition은 기본 상태에 설정됨 */
-    /* transition: opacity 0.3s ease-in-out; */ /* 이 줄은 이제 기본 상태에서 관리 */
 }
-/* ★------------------------------------ ★ */
-
 
 #lightboxImage {
-    max-width: 90%;
-    max-height: 80vh;
-    object-fit: contain;
+    /* 이미지가 부모 요소 (div.relative.w-full.h-full)에 꽉 차도록 */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 이미지 비율 유지하며 공간에 맞춤 */
     touch-action: manipulation;
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    /* transition: 없음 (애니메이션 제거) */
     will-change: opacity;
 }
 
-/* 이미지 페이드아웃 스타일 */
-#lightboxImage.image-fade-out {
-    opacity: 0;
-}
-
-
 #closeLightbox {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    color: white;
-    font-size: 30px;
+    /* Tailwind 클래스 활용 */
+    font-size: 2rem;
     cursor: pointer;
     z-index: 110;
     background: none;
     border: none;
+    outline: none;
 }
 
 #prevImage, #nextImage {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: white;
-    font-size: 50px;
+    /* Tailwind 클래스 활용 */
+    font-size: 2rem;
     cursor: pointer;
     z-index: 110;
     background: none;
     border: none;
-    padding: 10px; /* 클릭 영역 확보 */
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* 그림자 효과 */
+    outline: none;
 }
-#prevImage {
-    left: 15px;
-}
-#nextImage {
-    right: 15px;
+
+#imageCounter {
+    /* Tailwind 클래스 활용 */
 }
 
 /* 네이버 지도 API를 위한 스타일 */
-#map {
+#map, #map_parking { /* 주차 안내 지도도 동일한 스타일 적용 */
     width: 100%;
     height: 400px; /* 필요하면 이 값 조절 */
     margin: 0 auto;
@@ -196,4 +196,31 @@ body {
 .scroll-reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* 복사 성공 모달 스타일 */
+.copy-modal {
+    position: fixed;
+    bottom: 20px; /* 하단에서 20px 위로 */
+    left: 50%;
+    transform: translateX(-50%); /* 가로 중앙 정렬 */
+    background-color: rgba(0, 0, 0, 0.75); /* 반투명 검정 배경 */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    opacity: 0; /* 초기에는 숨김 */
+    visibility: hidden; /* 초기에는 숨김 */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out; /* 애니메이션 효과 */
+    will-change: opacity, transform;
+}
+
+.copy-modal.show {
+    opacity: 1; /* 표시될 때 완전히 보이게 */
+    transform: translateX(-50%) translateY(-10px); /* 약간 위로 올라오는 효과 */
+    visibility: visible;
 }

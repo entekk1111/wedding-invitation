@@ -70,21 +70,26 @@ const lightboxImage = document.getElementById('lightboxImage');
 const closeLightboxBtn = document.getElementById('closeLightbox');
 const prevImageBtn = document.getElementById('prevImage');
 const nextImageBtn = document.getElementById('nextImage');
+const loadMoreBtn = document.getElementById('loadMoreBtn'); // 새로 추가된 더보기 버튼
+const imageCounter = document.getElementById('imageCounter'); // 이미지 카운터 요소
 
 // 이미지 파일 목록 (img1.jpg ~ img40.jpg로 자동 생성)
 const images = [];
-for (let i = 1; i <= 40; i++) {
+for (let i = 1; i <= 21; i++) {
     images.push(`./images/gallery/img${i}.jpg`);
 }
 
-let currentImageIndex = 0;
-let isTransitioning = false; // 애니메이션 중복 방지 플래그
+// 갤러리에 처음 보여줄 이미지 개수 및 전체 이미지 개수 설정
+const initialImageCount = 9; // 처음 보여줄 썸네일 개수
+const expandedImageCount = 21; // '더보기' 클릭 시 보여줄 썸네일 개수 (img21까지 포함)
+let currentDisplayedImageCount = initialImageCount;
+let currentImageIndex = 0; // Lightbox에 현재 표시된 이미지 인덱스
+let isTransitioning = false; // 애니메이션 중복 방지 플래그 (애니메이션 없지만 유지)
 
 function displayGallery() {
     galleryGrid.innerHTML = '';
-    const numberOfThumbnailsToShow = 9;
-
-    for (let i = 0; i < numberOfThumbnailsToShow && i < images.length; i++) {
+    // 현재 표시할 이미지 개수만큼만 반복
+    for (let i = 0; i < currentDisplayedImageCount && i < images.length; i++) {
         const imagePath = images[i];
         const img = document.createElement('img');
         img.src = imagePath;
@@ -92,56 +97,62 @@ function displayGallery() {
         img.dataset.index = i;
         galleryGrid.appendChild(img);
     }
+    // '더보기' 버튼 표시 여부 결정
+    if (currentDisplayedImageCount < expandedImageCount && currentDisplayedImageCount < images.length) {
+        loadMoreBtn.style.display = 'block'; // 아직 더 보여줄 이미지가 있고, 전체 확장 개수보다 적으면 버튼 표시
+    } else {
+        loadMoreBtn.style.display = 'none'; // 아니면 버튼 숨김
+    }
+}
+
+function updateImageCounter() {
+    imageCounter.textContent = `${currentImageIndex + 1}/${images.length}`;
 }
 
 function openLightbox(index) {
     currentImageIndex = index;
-    lightboxImage.src = images[currentImageIndex]; // 첫 이미지 로드
-    lightboxModal.classList.add('visible'); // CSS visible 클래스 추가하여 보이게 함
+    lightboxImage.src = images[currentImageIndex]; // 이미지 즉시 로드
+    lightboxModal.classList.remove('hidden'); // Tailwind 'hidden' 클래스 제거
+    lightboxModal.classList.add('visible'); // 사용자 정의 'visible' 클래스 추가
     document.body.style.overflow = 'hidden'; // body 스크롤 방지
-    addSwipeListeners(); // Lightbox 열릴 때 스와이프 리스너 추가
-    isTransitioning = false; // 모달 열릴 때 트랜지션 상태 초기화
-    lightboxImage.classList.remove('image-fade-out'); // 혹시 모를 잔여 페이드아웃 클래스 제거
+    addSwipeListeners();
+    updateImageCounter(); // 카운터 업데이트
+    isTransitioning = false;
+    // 애니메이션 관련 클래스 모두 제거 (초기 로드 시에도)
+    lightboxImage.classList.remove('slide-next-in', 'slide-prev-in', 'slide-next-out', 'slide-prev-out', 'initial-load');
+    lightboxImage.style.opacity = 1; // 이미지는 항상 보이도록
 }
 
 function closeLightbox() {
-    lightboxModal.classList.remove('visible'); // CSS visible 클래스 제거하여 숨김
+    lightboxModal.classList.add('hidden'); // Tailwind 'hidden' 클래스 추가
+    lightboxModal.classList.remove('visible'); // 사용자 정의 'visible' 클래스 제거
     document.body.style.overflow = ''; // body 스크롤 허용
-    removeSwipeListeners(); // Lightbox 닫힐 때 스와이프 리스너 제거
+    removeSwipeListeners();
+    isTransitioning = false; // 닫을 때 애니메이션 플래그 초기화
 }
 
-// 다음 이미지 보여주기 함수 (애니메이션 적용)
+// 다음 이미지 보여주기 함수 (애니메이션 없음)
 function showNextImage() {
-    if (isTransitioning) return;
-    isTransitioning = true;
+    if (isTransitioning) return; // 애니메이션이 없어도, 빠른 클릭 방지용으로 유지
+    isTransitioning = true; // 잠시 true로 설정하여 빠른 클릭 방지
 
-    lightboxImage.classList.add('image-fade-out'); // 페이드아웃 시작
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    lightboxImage.src = images[currentImageIndex]; // 이미지 즉시 변경
+    updateImageCounter(); // 카운터 업데이트
 
-    setTimeout(() => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        lightboxImage.src = images[currentImageIndex];
-
-        lightboxImage.classList.remove('image-fade-out');
-
-        isTransitioning = false;
-    }, 300); // CSS transition 시간과 일치 또는 약간 길게 설정 (ms)
+    isTransitioning = false; // 이미지 변경 후 바로 false로 설정
 }
 
-// 이전 이미지 보여주기 함수 (애니메이션 적용)
+// 이전 이미지 보여주기 함수 (애니메이션 없음)
 function showPrevImage() {
-    if (isTransitioning) return;
-    isTransitioning = true;
+    if (isTransitioning) return; // 애니메이션이 없어도, 빠른 클릭 방지용으로 유지
+    isTransitioning = true; // 잠시 true로 설정하여 빠른 클릭 방지
 
-    lightboxImage.classList.add('image-fade-out'); // 페이드아웃 시작
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    lightboxImage.src = images[currentImageIndex]; // 이미지 즉시 변경
+    updateImageCounter(); // 카운터 업데이트
 
-    setTimeout(() => {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        lightboxImage.src = images[currentImageIndex];
-
-        lightboxImage.classList.remove('image-fade-out');
-
-        isTransitioning = false;
-    }, 300); // CSS transition 시간과 일치 또는 약간 길게 설정 (ms)
+    isTransitioning = false; // 이미지 변경 후 바로 false로 설정
 }
 
 
@@ -157,6 +168,13 @@ galleryGrid.addEventListener('click', (e) => {
 closeLightboxBtn.addEventListener('click', closeLightbox);
 prevImageBtn.addEventListener('click', showPrevImage);
 nextImageBtn.addEventListener('click', showNextImage);
+
+// '더보기' 버튼 클릭 이벤트 리스너
+loadMoreBtn.addEventListener('click', () => {
+    currentDisplayedImageCount = expandedImageCount; // 표시할 이미지 개수를 확장된 개수로 변경
+    displayGallery(); // 갤러리 다시 그리기
+});
+
 
 // 키보드 방향키로 이동 (선택 사항)
 document.addEventListener('keydown', (e) => {
@@ -178,17 +196,17 @@ let touchEndX = 0;
 const swipeThreshold = 50; // 스와이프로 인식할 최소 이동 거리 (px)
 
 function handleTouchStart(e) {
-    if (isTransitioning) return;
+    if (isTransitioning) return; // 빠른 터치 방지용으로 유지
     touchStartX = e.changedTouches[0].screenX;
 }
 
 function handleTouchMove(e) {
-    if (isTransitioning) return;
+    if (isTransitioning) return; // 빠른 터치 방지용으로 유지
     touchEndX = e.changedTouches[0].screenX;
 }
 
 function handleTouchEnd() {
-    if (isTransitioning) return;
+    if (isTransitioning) return; // 빠른 터치 방지용으로 유지
 
     const deltaX = touchEndX - touchStartX;
 
@@ -234,18 +252,51 @@ function revealOnScroll() {
         if (!element.classList.contains('visible') && isInViewport(element)) {
             element.classList.add('visible');
         }
-        // else if (element.classList.contains('visible') && !isInViewport(element) && rect.bottom < 0) {
-        //     element.classList.remove('visible');
-        // }
     });
 }
+
+// 주소 복사 기능 (모달 메시지 사용)
+document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', async () => {
+        const textToCopy = button.dataset.copyText;
+        const copySuccessModal = document.getElementById('copySuccessModal'); // 모달 요소 가져오기
+
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+
+            // 모달 표시
+            copySuccessModal.classList.add('show');
+
+            // 2초 후 모달 숨기기
+            setTimeout(() => {
+                copySuccessModal.classList.remove('show');
+            }, 2000); // 2초 (2000ms) 후에 숨김
+
+            // 아이콘 변경 (선택 사항)
+            const icon = button.querySelector('i');
+            if (icon) {
+                icon.classList.remove('far', 'fa-copy');
+                icon.classList.add('fas', 'fa-check'); // 체크 아이콘으로 변경
+                setTimeout(() => {
+                    icon.classList.remove('fas', 'fa-check');
+                    icon.classList.add('far', 'fa-copy'); // 다시 복사 아이콘으로
+                }, 1500); // 아이콘 변경은 모달이 사라지기 전에 원상 복구
+            }
+        } catch (err) {
+            console.error('클립보드 복사 실패:', err);
+            // 복사 실패 시에는 alert 유지 (대체 불가 시)
+            alert('주소 복사에 실패했습니다. 수동으로 복사해주세요.');
+        }
+    });
+});
+
 
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
     // 페이지 로드 시 첫 번째 텍스트 타이핑 시작
     startTyping(text1); // startTyping 함수 내부에서 메인 이미지 페이드인 시작
 
-    // 갤러리 표시 (이제 9개만)
+    // 갤러리 표시 (초기 9개)
     displayGallery();
 
     // 스크롤 리빌 초기 실행 및 이벤트 리스너 등록

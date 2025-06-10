@@ -5,28 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>우리의 결혼식</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Dancing Script 폰트는 그대로 유지하여 캘igraphy에 사용 -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link rel="stylesheet" href="./style.css">
 </head>
 <body class="bg-white text-gray-800">
 
-  <!-- 사진 + 캘igraphy 텍스트 -->
-  <!-- class="scroll-reveal" 유지 -->
   <section class="relative text-center scroll-reveal">
-    <!-- id="mainImage" 추가 -->
     <img id="mainImage" src="./images/main/img4.jpg" alt="커플 사진" class="mx-auto w-full max-w-md" />
-    <!-- ------------------- -->
     <h2 id="typingText"
         class="absolute left-1/2 transform -translate-x-1/2
-               text-white text-l script-font drop-shadow-lg whitespace-nowrap" style="padding-bottom: 200px;">
-      <!-- 내용을 비워둡니다. JavaScript가 채울 예정입니다. -->
+            text-white nanum-myeongjo-bold text-l script-font whitespace-nowrap" style="text-shadow: 1px 1px 10px rgb(0, 0, 0); -webkit-text-stroke: 0.1px black;">
     </h2>
-    <!-- ------------------------------------------- -->
   </section>
 
-    <!-- class="scroll-reveal" 유지 -->
     <div class="max-w-md mx-auto pb-10 pb-1 0 scroll-reveal">
         <header class="text-center">
             <h1 class="text-2xl font-bold my-5 nanum-myeongjo-regular">박 수 현 & 김 다 미</h1>
@@ -35,10 +28,9 @@
         </header>
     </div>
 
-    <!-- '우리의 약속' 섹션 (배경색 유지) - class="scroll-reveal" 유지 -->
     <section class="p-6 my-3 py-20 text-center scroll-reveal" style="background-color: rgba(152, 202, 169, 0.471);">
         <img src="./images/icons/leaf.png" alt="작은 나뭇잎 그림" class="mx-auto w-10 h-10 mb-4">
-        <p class="text-s text-gray-700 leading-relaxed noto-serif-kr-regular">
+        <p class="text-s text-gray-700 leading-relaxed noto-serif-kr-regular" style="line-height: 2;">
         가을 햇살 아래 <span class="noto-serif-kr-bold">다</span>정하게 마주 앉아<br>
         영원한 사랑의 <span class="noto-serif-kr-bold">미</span>래를 그립니다.<br>
         풍요로운 마음을 <span class="noto-serif-kr-bold">수</span>놓는 이 계절<br>
@@ -52,55 +44,93 @@
     </section>
 
 
-    <!-- 갤러리 섹션 (제목: 사진첩, 썸네일 9개) - class="scroll-reveal" 유지 -->
-    <section class="max-w-md mx-auto p-6 scroll-reveal">
-        <h2 class="text-2xl font-bold text-center mb-6">사진첩</h2>
-
-        <div id="galleryGrid">
-            <!-- JavaScript로 첫 9개의 이미지가 여기에 추가됩니다 -->
-        </div>
+    <section class="max-w-md mx-auto pt-20 p-6 scroll-reveal">
+        <h2 class="text-2xl font-bold text-center mb-6">Gallery</h2>
+        <span class="gallery-instruction">사진을 클릭하시면 전체 화면 보기가 가능합니다.</span>
+        <div id="galleryGrid"></div>
+        <button id="loadMoreBtn" class="block w-full py-3 mt-6 text-gray-800 text-lg font-semibold rounded-lg hover:bg-gray-200 transition duration-300 ease-in-out"> <span class="fas fa-chevron-down mr-2"></span> 더보기 
+        </button>
     </section>
 
 
-    <!-- Location 섹션 (제목: 장소, 네이버 지도 API 사용) - class="scroll-reveal" 유지 -->
-    <section class="max-w-md mx-auto p-6 text-center scroll-reveal">
-        <h2 class="text-2xl font-semibold mb-4">장소</h2>
-        <p class="text-sm text-gray-600 mb-4">전북 전주시 완산구 향교길 139 전주향교</p>
+    <section class="max-w-md mx-auto pt-20 p-6 text-center scroll-reveal" style="background-color: rgba(152, 202, 169, 0.471);">
+        <h2 class="text-2xl font-semibold mb-6">오시는 길</h2>
+        <p class="text-lg text-gray-600 mb-4">전주 향교 명륜당</p>
+        <p class="text-sm text-gray-600 mb-4 flex items-center justify-center">
+            전북 전주시 완산구 향교길 139
+            <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="전북 전주시 완산구 향교길 139">
+                <i class="far fa-copy"></i>
+            </button>
+        </p>
 
         <div id="map"></div>
+    </section>
 
-        <!-- 네이버 지도 링크 (필요하다면 유지) -->
-        <a href="https://map.naver.com/p/entry/place/11593301?c=15.00,0,0,0,dh" target="_blank" class="text-blue-600 underline mt-4 inline-block">네이버 지도 크게 보기</a>
+    <section class="max-w-md mx-auto pt-20 p-6 text-center scroll-reveal" style="background-color: rgba(152, 202, 169, 0.471);">
+        <h2 class="text-2xl font-semibold mb-6">주차 안내</h2>
+        <p class="text-lg text-gray-600 mb-4">국립무형유산원</p>
+        <p class="text-sm text-gray-600 mb-4 flex items-center justify-center">
+            전북 전주시 완산구 서학로 95
+            <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="전북 전주시 완산구 서학로 95">
+                <i class="far fa-copy"></i>
+            </button>
+        </p>
+
+        <div id="map_parking"></div>
     </section>
 
 
-    <!-- Lightbox 모달 -->
-    <!-- ★ class="hidden" 제거 ★ -->
-    <div id="lightboxModal">
-        <button id="closeLightbox">&times;</button>
-        <img id="lightboxImage" src="" alt="Gallery Image">
-        <button id="prevImage">&lt;</button>
-        <button id="nextImage">&gt;</button>
+    <div id="lightboxModal" class="fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 z-50 hidden flex items-center justify-center">
+        <button id="closeLightbox" class="absolute top-4 right-4 text-gray-700 text-xl focus:outline-none">&times;</button>
+        <div class="relative w-full h-full flex flex-col items-center justify-center">
+            <img id="lightboxImage" src="" alt="Gallery Image" class="max-h-screen object-contain">
+            <div class="absolute bottom-10 w-full flex justify-between items-center px-4">
+                <button id="prevImage" class="text-gray-700 text-xl focus:outline-none">&lt;</button>
+                <span id="imageCounter" class="text-gray-700 text-sm"></span>
+                <button id="nextImage" class="text-gray-700 text-xl focus:outline-none">&gt;</button>
+            </div>
+        </div>
     </div>
-    <!-- ★------------------- ★ -->
 
 
-    <!-- 마음 전하실 곳 + 푸터 감싸는 div - class="scroll-reveal" 유지 -->
-    <div class="max-w-md mx-auto p-6 space-y-6 scroll-reveal">
+    <div class="max-w-md mx-auto p-6 pt-20 space-y-6 scroll-reveal">
         <section class="text-center">
-        <h2 class="text-xl font-semibold">마음 전하실 곳</h2>
-        <p class="text-sm text-gray-600">신랑 계좌: 국민은행 123456-78-901234</p>
-        <p class="text-sm text-gray-600">신부 계좌: 신한은행 987654-32-109876</p>
+            <h2 class="text-xl font-semibold mb-4">마음 전하실 곳</h2>
+            <p class="text-sm text-gray-600 mb-2">신랑 계좌: 국민은행 123456-78-901234</p>
+            <p class="text-sm text-gray-600 mb-6">신부 계좌: 신한은행 987654-32-109876</p>
+
+            <p class="text-xs text-gray-500 leading-relaxed mb-4">
+                참석이 어려우신 분들을 위해 기재했습니다.<br>
+                너그러운 마음으로 양해 부탁드립니다.
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                <div class="text-left">
+                    <p class="font-semibold mb-2">신랑측</p>
+                    <p>박수현 <span class="float-right">010-0000-0000</span></p>
+                    <p>신랑부 000-0000-0000</p>
+                    <p>신랑모 000-0000-0000</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold mb-2">신부측</p>
+                    <p>김다미 <span class="float-right">010-0000-0000</span></p>
+                    <p>신부부 000-0000-0000</p>
+                    <p>신부모 000-0000-0000</p>
+                </div>
+            </div>
         </section>
 
         <footer class="text-center text-xs text-gray-400 mt-8">
-        © 2025 박수현 & 김다미
+            © 2025 박수현 & 김다미
         </footer>
     </div>
 
 
-    <!-- 네이버 지도 API 스크립트 -->
-    <!-- ★ ncpKeyId="YOUR_NCP_CLIENT_ID" 부분을 실제 Client ID로 변경하세요 ★ -->
+    <div id="copySuccessModal" class="copy-modal">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>주소가 복사되었습니다.</span>
+    </div>
+
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=29a2dkkzzf"></script>
     <script src="./js/naverMapApi.js"></script>
     <script src="./js/script.js"></script>
