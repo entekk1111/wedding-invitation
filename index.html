@@ -24,11 +24,11 @@
         <header class="text-center">
             <h1 class="text-2xl md:text-3xl font-bold my-5 nanum-myeongjo-regular">박 수 현 & 김 다 미</h1>
             <p class="text-base md:text-lg mt-3">2025.11.09 (일) 오후 12시</p>
-            <p class="text-base md:text-lg text-gray-600">전주 향교 명륜당</p>
+            <p class="text-base md:text-lg text-gray-600">전주 향교</p>
         </header>
     </div>
 
-    <section class="p-6 my-3 py-20 text-center scroll-reveal bg-green-50 bg-opacity-70">
+    <section class="p-6 my-3 py-5 text-center scroll-reveal bg-green-50 bg-opacity-70">
         <div class="my-8 flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
             <span class="text-xl mx-4 nanum-myeongjo-bold">초대합니다</span>
@@ -52,7 +52,7 @@
         </div>
     </section>
 
-    <section class="max-w-md mx-auto pt-20 p-6 scroll-reveal">
+    <section class="max-w-md mx-auto p-6 scroll-reveal">
         <div class="my-8 flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
             <span class="text-2xl mx-4 nanum-myeongjo-bold">Gallery</span>
@@ -65,13 +65,13 @@
         </button>
     </section>
 
-    <section class="max-w-md mx-auto pt-20 p-6 text-center scroll-reveal bg-green-50 bg-opacity-70">
+    <section class="max-w-md mx-auto p-6 text-center scroll-reveal bg-green-50 bg-opacity-70">
         <div class="my-8 flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
             <span class="text-xl mx-4 nanum-myeongjo-bold">오시는 길</span>
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
         </div>
-        <p class="text-lg text-gray-600 mb-2">전주 향교 명륜당</p>
+        <p class="text-lg text-gray-600 mb-2">전주 향교</p>
         <p class="text-sm text-gray-600 mb-4 flex items-center justify-center">
             전북 전주시 완산구 향교길 139
             <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="전북 전주시 완산구 향교길 139">
@@ -83,7 +83,7 @@
             <button class="btn-map-link" onclick="window.open('https://naver.me/Gn0ydrPA', '_blank')">
                 <img src="./images/icons/naver_map.png" alt="네이버 지도" class="w-6 h-6 inline-block mr-1"> 네이버 지도
             </button>
-            <button class="btn-map-link" onclick="window.open('https://place.map.kakao.com/8064969', '_blank')">
+            <button class="btn-map-link" onclick="window.open('https://place.map.kakao.com/17577068', '_blank')">
                 <img src="./images/icons/kakao_map.png" alt="카카오 지도" class="w-6 h-6 inline-block mr-1"> 카카오 지도
             </button>
         </div>
@@ -96,32 +96,20 @@
         </div>
     </section>
 
-   <section class="max-w-md mx-auto pt-20 p-6 text-center scroll-reveal bg-green-50 bg-opacity-70">
+   <section class="max-w-md mx-auto p-6 text-center scroll-reveal bg-green-50 bg-opacity-70">
         <div class="my-8 flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
             <span class="text-xl mx-4 nanum-myeongjo-bold">주차 안내</span>
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
         </div>
-        <p class="text-lg text-gray-600 mb-4">국립무형유산원</p>
-        <p class="text-sm text-gray-600 mb-4 flex items-center justify-center">
-            전북 전주시 완산구 서학로 95
-            <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="전북 전주시 완산구 서학로 95">
-                <i class="far fa-copy"></i>
-            </button>
         </p>
-        <div id="map_parking" class="map-container"></div>
-        <div class="flex justify-around mt-4">
-            <button class="btn-map-link" onclick="window.open('nmap://map?lat=35.812774378501416&lng=127.15711520010265&zoom=20&appname=https://entekk1111.github.io/wedding-invitation', '_blank')">
-                <img src="./images/icons/naver_map.png" alt="네이버 지도" class="w-6 h-6 inline-block mr-1"> 네이버 지도
-            </button>
-            <button class="btn-map-link" onclick="window.open('https://kko.to/H-d9KqP-G', '_blank')">
-                <img src="./images/icons/kakao_map.png" alt="카카오맵" class="w-6 h-6 inline-block mr-1"> 카카오맵
-            </button>
+        <div>
+            <img src="./images/icons/park_info_map.png">
         </div>
         <div class="mt-8 text-left text-sm text-gray-700">
             <p class="font-semibold mb-2">주차 정보</p>
             <ul class="list-disc list-inside space-y-1">
-                <li>국립무형유산원 주차장 이용 (결혼식장까지 도보 5분)</li>
+                <li>국립무형유산원 또는 한벽문화관 주차장 이용(향교까지 도보 5분)</li>
                 <li>주차는 무료입니다.</li>
             </ul>
         </div>
@@ -204,16 +192,12 @@
         </footer>
     </div>
 
-    <div id="copySuccessModal" class="copy-modal">
+    <div id="copySuccessModal" class="copy-modal" style="width: 80%;">
         <i class="fas fa-check-circle mr-2"></i>
-        <span>주소가 복사되었습니다.</span>
+        <span class="text-sm">주소가 복사되었습니다.</span>
     </div>
 
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=29a2dkkzzf"></script>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js" integrity="sha384-dok87au0gKqJdxs7msEdBPNnKSRT+/mhTVzq+qOhcL464zXwvcrpjeWvyj1kCdq6" crossorigin="anonymous"></script>
-    <script>
-        Kakao.init('${1a0564fc88291902fd04ccbd4a93ef61}');  
-    </script>
     <script src="./js/naverMapApi.js"></script>
     <script src="./js/script.js"></script>
 
