@@ -322,13 +322,12 @@ function revealOnScroll() {
 
 function go_navi() {
     Kakao.Navi.start({
-        name: 명칭,
-        x: 127.034123123,
-        y: 37.123123,
+        name: '전주 향교',
+        x: 35.812774378501416,
+        y: 127.15711520010265,
         coordType: 'wgs84',
     });
 }
-출처: https://solbel.tistory.com/2942 [개발자의 끄적끄적:티스토리]
 
 /**
  * 주소/계좌번호 복사 기능 (모달 메시지 사용)
