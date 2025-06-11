@@ -321,11 +321,18 @@ function revealOnScroll() {
 }
 
 function go_navi() {
+    console.log('tt');
+    // Kakao.Navi.start({
+    //     name: '전주 향교',
+    //     x: 35.812774378501416,
+    //     y: 127.15711520010265,
+    //     coordType: 'wgs84',
+    // });
     Kakao.Navi.start({
-        name: '전주 향교',
-        x: 35.812774378501416,
-        y: 127.15711520010265,
-        coordType: 'wgs84',
+      name: '현대백화점 판교점',
+      x: 127.11205203011632,
+      y: 37.39279717586919,
+      coordType: 'wgs84',
     });
 }
 
