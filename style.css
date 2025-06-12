@@ -289,3 +289,14 @@ body {
 #musicToggle.hide-animation {
     animation: shrinkToggleWidth 0.5s ease-out forwards; /* 0.5초 동안 실행, 최종 상태 유지 */
 }
+
+/* 계좌 정보 표시/숨김을 위한 CSS (JavaScript에서 'hidden' 클래스를 토글) */
+/* .account-details에는 transition, max-height, opacity 등의 애니메이션 관련 스타일을 제거합니다. */
+/* Tailwind의 hidden 클래스가 display: none;을 적용하여 즉시 숨깁니다. */
+.account-toggle-btn .toggle-icon {
+    transition: transform 0.3s ease-in-out;
+}
+
+.account-toggle-btn.active .toggle-icon {
+    transform: rotate(180deg);
+}

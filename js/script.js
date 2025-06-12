@@ -76,7 +76,6 @@ function handleFirstUserInteraction() {
             musicIcon.classList.add('fa-volume-up');
             hasUserInteracted = true;
         }).catch(error => {
-            // 자동 재생 실패 시 (브라우저 정책 등), 음소거 아이콘 유지
             console.log("자동 재생이 차단되었습니다. 사용자 상호작용이 필요합니다.", error);
             hasUserInteracted = true; // 이후 수동 재생은 가능하도록 플래그 설정
         });
@@ -363,7 +362,7 @@ function handleTouchStart(e) {
 
 function handleTouchMove(e) {
     if (!isDragging || isLightboxTransitioning) return;
-    touchCurrentX = e.changedTouches[0].screenX;
+    touchCurrentX = e.changedTouches[0].screenX; 
     const deltaX = touchCurrentX - touchStartX;
     // 현재 이미지의 기준 위치(window.innerWidth만큼 왼쪽으로 이동된 상태)에서 드래그 양만큼 추가 이동
     lightboxImageContainerEl.style.transform = `translateX(calc(-${window.innerWidth}px + ${deltaX}px))`;
@@ -461,6 +460,22 @@ document.querySelectorAll('.copy-button').forEach(button => {
             console.error('클립보드 복사 실패:', err);
             alert('복사에 실패했습니다. 수동으로 복사해주세요.');
         }
+    });
+});
+
+/**
+ * 계좌 정보 표시/숨김 기능 (버튼 클릭 방식) - 'hidden' 클래스 토글
+ */
+document.querySelectorAll('.account-toggle-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const targetId = button.dataset.target;
+        const targetElement = document.getElementById(targetId); // account-details div
+        const toggleIcon = button.querySelector('.toggle-icon');
+
+        // 현재 클릭된 계좌 정보 토글
+        targetElement.classList.toggle('hidden'); // hidden 클래스 토글 (보이기/숨기기)
+        button.classList.toggle('active'); // 버튼 active 클래스 토글 (아이콘 회전용)
+        toggleIcon.classList.toggle('active'); // 아이콘 active 클래스 토글 (회전)
     });
 });
 

@@ -21,13 +21,12 @@ var marker = new naver.maps.Marker({
     map: map
 });
 
-// var size = new naver.maps.Size(350, 250),
-//     sizeObject = {
-//         width: 350,
-//         height: 250
-//     };
-
-// map.setSize(sizeObject);
+var size = new naver.maps.Size(300, 250),
+    sizeObject = {
+        width: 300,
+        height: 250
+};
+map.setSize(sizeObject);
 
 // var markerOptions = {
 //     position: position.destinationPoint(90, 15),

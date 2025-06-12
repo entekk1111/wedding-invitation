@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍀박수현🖤김다미 결혼식에 초대합니다🍀</title>
+    <title>박수현 & 김다미 결혼합니다</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Nanum+Myeongjo:wght@400;700&family=Noto+Serif+KR:wght@200..900&family=Stylish&display=swap">
     <link rel="stylesheet" href="./style.css">
-    <meta property="og:image" content="./image/gallery/img2.jpg">
-    <meta property="og:description" content="2025년 11월 9일 일요일 낮 12시 전주 향교에서 만나요💝">
 </head>
 <body class="bg-white text-gray-800">
 
@@ -144,10 +142,10 @@
     <section class="max-w-md mx-auto p-6 space-y-6 scroll-reveal">
         <div class="my-8 flex items-center justify-center">
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
-            <span class="text-xl mx-4 nanum-myeongjo-bold">마음 전하실 곳</span>
+            <span class="text-lg mx-4 nanum-myeongjo-bold">마음 전하실 곳</span>
             <div class="flex-grow border-t border-gray-300 w-1/4"></div>
         </div>
-        <p class="text-lg text-gray-600 leading-relaxed mb-4">
+        <p class="text-sm text-gray-600 leading-relaxed mb-4">
             바쁘신 와중에도 저희 결혼식을 축하해 주시는<br>
             모든 분들께 깊이 감사드립니다.<br>
             참석이 어려우신 분들을 위해<br>
@@ -156,38 +154,82 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
             <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                <p class="font-semibold mb-2 flex items-center"><i class="fas fa-male mr-2"></i> 신랑측</p>
-                <p class="mb-2">박수현</p>
-                <div class="flex items-center justify-between">
-                    <span>국민은행 123456-78-901234</span>
-                    <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="12345678901234">
-                        <i class="far fa-copy"></i>
-                    </button>
-                </div>
-                <a href="tel:010-0000-0000" class="block text-blue-600 hover:underline mt-2">
-                    <i class="fas fa-phone mr-2"></i> 010-0000-0000
-                </a>
+                <button class="w-full text-left font-semibold mb-2 flex items-center justify-between account-toggle-btn" data-target="groom-accounts-detail">
+                    <span class="flex items-center"><i class="fas fa-male mr-2"></i> 신랑측</span>
+                    <i class="fas fa-chevron-down toggle-icon transition-transform duration-300"></i>
+                </button>
+                <div id="groom-accounts-detail" class="account-details hidden">
+                    <p class="mb-2">박수현</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <span>국민은행 123456-78-901234</span>
+                        <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="12345678901234">
+                            <i class="far fa-copy"></i>
+                        </button>
                     </div>
+                    <a href="tel:010-0000-0000" class="block text-blue-600 hover:underline mb-3">
+                        <i class="fas fa-phone mr-2"></i> 010-0000-0000
+                    </a>
+                    <p class="mb-2">박수영 (신랑 아버지)</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <span>국민은행 111111-22-333333</span>
+                        <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="11111122333333">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="mb-2">최영복 (신랑 어머니)</p>
+                    <div class="flex items-center justify-between">
+                        <span>국민은행 444444-55-666666</span>
+                        <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="44444455666666">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                <p class="font-semibold mb-2 flex items-center"><i class="fas fa-female mr-2"></i> 신부측</p>
-                <p class="mb-2">김다미</p>
-                <div class="flex items-center justify-between">
-                    <span>신한은행 987654-32-109876</span>
-                    <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="98765432109876">
-                        <i class="far fa-copy"></i>
-                    </button>
+                <button class="w-full text-left font-semibold mb-2 flex items-center justify-between account-toggle-btn" data-target="bride-accounts-detail">
+                    <span class="flex items-center"><i class="fas fa-female mr-2"></i> 신부측</span>
+                    <i class="fas fa-chevron-down toggle-icon transition-transform duration-300"></i>
+                </button>
+                <div id="bride-accounts-detail" class="account-details hidden">
+                    <p class="mb-2">김다미</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <span>신한은행 987654-32-109876</span>
+                        <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="98765432109876">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <a href="tel:010-0000-0000" class="block text-blue-600 hover:underline mb-3">
+                        <i class="fas fa-phone mr-2"></i> 010-0000-0000
+                    </a>
+                    <p class="mb-2">김미영 (신부 어머니)</p>
+                    <div class="flex items-center justify-between">
+                        <span>신한은행 777777-88-999999</span>
+                        <button class="copy-button ml-2 text-gray-600 hover:text-gray-800" data-copy-text="77777788999999">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
                 </div>
-                <a href="tel:010-0000-0000" class="block text-blue-600 hover:underline mt-2">
-                    <i class="fas fa-phone mr-2"></i> 010-0000-0000
-                </a>
-                </div>
+            </div>
         </div>
     </section>
 
-        <footer class="text-center text-xs text-gray-400 mt-8">
-            © 2025 박수현 & 김다미
-        </footer>
+    <section class="max-w-md mx-auto p-6 text-center scroll-reveal">
+        <div class="my-8 flex items-center justify-center">
+            <div class="flex-grow border-t border-gray-300 w-1/4"></div>
+            <span class="text-base mx-4 nanum-myeongjo-bold">저희의 시작을<br>축복해주세요</span>
+            <div class="flex-grow border-t border-gray-300 w-1/4"></div>
+        </div>
+        <img src="./images/footer/footer.jpg" alt="마지막 사진" class="w-full rounded-lg shadow-md mx-auto">
+        <p class="text-sm text-gray-700 mt-6 leading-relaxed">
+            함께 만들어갈 아름다운 날들을 기대하며<br>
+            저희의 새로운 시작에 함께해 주셔서 감사합니다.
+        </p>
+    </section>
+
+    <footer class="text-center text-xs text-gray-400 mt-8 pb-10">
+        © 2025 박수현 & 김다미
+    </footer>
 
     <div id="copySuccessModal" class="copy-modal" style="width: 80%;">
         <i class="fas fa-check-circle mr-2"></i>
