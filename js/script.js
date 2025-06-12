@@ -28,6 +28,11 @@ const imageCounterEl = document.getElementById('imageCounter');
 const copySuccessModalEl = document.getElementById('copySuccessModal');
 const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
 
+// 배경 음악 관련 DOM 요소
+const backgroundMusic = document.getElementById('backgroundMusic');
+const musicToggle = document.getElementById('musicToggle');
+const musicIcon = musicToggle.querySelector('i');
+const musicText = document.getElementById('musicText'); // 추가된 음악 텍스트 요소
 
 let typingIndex = 0;
 let currentTypingText = TYPING_TEXT_1;
@@ -40,6 +45,89 @@ const galleryImages = [];
 for (let i = 1; i <= GALLERY_IMAGE_COUNT; i++) {
     galleryImages.push(`./images/gallery/img${i}.jpg`);
 }
+
+// 배경 음악 자동 재생 시도 및 토글 관련 로직
+let hasUserInteracted = false; // 사용자의 첫 상호작용 여부 플래그
+
+// '배경음악이 있습니다.' 문구를 숨기는 함수
+function hideMusicTextWithAnimation() {
+    if (musicText) {
+        // 텍스트와 토글 버튼에 애니메이션 클래스 추가
+        musicText.classList.add('hide-animation');
+        musicToggle.classList.add('hide-animation');
+
+        // 애니메이션 완료 후 텍스트 숨기기 및 공간 제거
+        setTimeout(() => {
+            musicText.style.display = 'none'; // 완전히 숨김
+            // musicToggle의 width가 'auto'에서 줄어들었으므로,
+            // 이후 flexbox 계산에 영향 주지 않도록 flex-basis: 0; 같은 처리도 고려 가능.
+            // 하지만 animation forwards로 최종 상태 유지되므로 일단은 이렇게.
+        }, 500); // CSS 애니메이션 시간과 동일하게
+    }
+}
+
+
+// 첫 사용자 상호작용 (클릭/터치) 시 음악 재생 시도
+function handleFirstUserInteraction() {
+    if (!hasUserInteracted) {
+        backgroundMusic.play().then(() => {
+            // 재생 성공 시 아이콘 업데이트
+            musicIcon.classList.remove('fa-volume-mute');
+            musicIcon.classList.add('fa-volume-up');
+            hasUserInteracted = true;
+        }).catch(error => {
+            // 자동 재생 실패 시 (브라우저 정책 등), 음소거 아이콘 유지
+            console.log("자동 재생이 차단되었습니다. 사용자 상호작용이 필요합니다.", error);
+            hasUserInteracted = true; // 이후 수동 재생은 가능하도록 플래그 설정
+        });
+        // 첫 상호작용 후 리스너 제거 (한 번만 실행되도록)
+        document.removeEventListener('click', handleFirstUserInteraction);
+        document.removeEventListener('touchstart', handleFirstUserInteraction);
+
+        // 2초 뒤에 문구 숨기기 애니메이션 시작
+        setTimeout(hideMusicTextWithAnimation, 2000); // 2초 (2000ms) 후에 애니메이션 시작
+    }
+}
+
+// 음악 토글 기능
+musicToggle.addEventListener('click', () => {
+    // 만약 텍스트가 아직 보이고 있다면, 즉시 숨김
+    if (musicText && musicText.style.display !== 'none') {
+        musicText.classList.add('hide-animation');
+        musicToggle.classList.add('hide-animation');
+        setTimeout(() => {
+            musicText.style.display = 'none';
+        }, 500);
+    }
+
+    if (backgroundMusic.paused) {
+        backgroundMusic.play().then(() => {
+            musicIcon.classList.remove('fa-volume-mute');
+            musicIcon.classList.add('fa-volume-up');
+        }).catch(error => {
+            console.error("음악 재생에 실패했습니다:", error);
+        });
+    } else {
+        backgroundMusic.pause();
+        musicIcon.classList.remove('fa-volume-up');
+        musicIcon.classList.add('fa-volume-mute');
+    }
+});
+
+// 음악 재생/일시정지 상태 변화 시 아이콘 업데이트
+backgroundMusic.addEventListener('play', () => {
+    musicIcon.classList.remove('fa-volume-mute');
+    musicIcon.classList.add('fa-volume-up');
+});
+
+backgroundMusic.addEventListener('pause', () => {
+    musicIcon.classList.remove('fa-volume-up');
+    musicIcon.classList.add('fa-volume-mute');
+});
+
+// 초기 아이콘 상태 설정 (대부분의 브라우저에서 초기에는 재생되지 않으므로 음소거로 시작)
+musicIcon.classList.add('fa-volume-mute');
+
 
 /**
  * 타이핑 효과 함수
@@ -119,58 +207,64 @@ function updateImageCounter() {
     imageCounterEl.textContent = `${currentImageIndex + 1}/${galleryImages.length}`;
 }
 
+/**
+ * 라이트박스에 현재 인덱스 기준으로 이미지를 로드하고 표시하는 함수
+ * 슬라이드를 위해 현재, 이전, 다음 이미지를 로드하고 배치합니다.
+ * @param {number} index - 현재 보여줄 이미지의 인덱스
+ */
+function loadLightboxImage(index) {
+    lightboxImageContainerEl.innerHTML = ''; // 기존 이미지 모두 제거
+
+    // 이전 이미지 인덱스 계산
+    const prevIndex = (index - 1 + galleryImages.length) % galleryImages.length;
+    // 현재 이미지 인덱스
+    const currentIndex = index;
+    // 다음 이미지 인덱스 계산
+    const nextIndex = (index + 1) % galleryImages.length;
+
+    // 로드할 이미지 인덱스 배열
+    const indicesToLoad = [prevIndex, currentIndex, nextIndex];
+
+    // 각 인덱스에 해당하는 이미지를 생성하여 컨테이너에 추가
+    indicesToLoad.forEach(idx => {
+        const imgContainer = document.createElement('div');
+        const img = document.createElement('img');
+        img.src = galleryImages[idx];
+        img.alt = 'Gallery Image';
+        imgContainer.appendChild(img);
+        lightboxImageContainerEl.appendChild(imgContainer);
+    });
+
+    // 현재 이미지가 중앙에 오도록 초기 translateX 위치 설정
+    // 각 이미지는 100% 너비를 가지므로, 뷰포트 너비만큼 이동
+    lightboxImageContainerEl.style.transform = `translateX(-${window.innerWidth}px)`;
+}
+
+
 function openLightbox(index) {
     currentImageIndex = index;
     isLightboxTransitioning = true; // 라이트박스 열림 시작
 
-    // 라이트박스 컨테이너에 모든 이미지 추가 (이미지 로드 완료 대기)
-    lightboxImageContainerEl.innerHTML = '';
-    let imagesLoadedCount = 0;
-    const totalImagesToLoad = galleryImages.length;
-
-    galleryImages.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = 'Gallery Image';
-        img.onload = () => {
-            imagesLoadedCount++;
-            if (imagesLoadedCount === totalImagesToLoad) {
-                // 모든 이미지가 로드된 후 초기 위치 설정 및 애니메이션 준비
-
-                // --- 버그 수정: 초기 위치 설정 시 트랜지션 일시 비활성화 ---
-                lightboxImageContainerEl.style.transition = 'none'; // 트랜지션 비활성화
-                lightboxImageContainerEl.style.transform = `translateX(-${currentImageIndex * 100}%)`;
-
-                // 아주 짧은 setTimeout으로 다음 렌더링 사이클에서 트랜지션 복원
-                // 이렇게 해야 브라우저가 'transition: none'을 먼저 적용하고 'transform'을 변경한 후,
-                // 다시 'transition'을 설정하는 것을 인지합니다.
-                setTimeout(() => {
-                    lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out'; // 트랜지션 복원
-                    isLightboxTransitioning = false; // 모든 이미지 로드 및 초기 위치 설정 완료
-                }, 50); // 아주 짧은 지연 시간 (예: 50ms)
-                // -----------------------------------------------------------
-            }
-        };
-        img.onerror = () => {
-            console.error(`Failed to load image: ${src}`);
-            imagesLoadedCount++;
-            if (imagesLoadedCount === totalImagesToLoad) {
-                lightboxImageContainerEl.style.transition = 'none';
-                lightboxImageContainerEl.style.transform = `translateX(-${currentImageIndex * 100}%)`;
-                setTimeout(() => {
-                    lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out';
-                    isLightboxTransitioning = false;
-                }, 50);
-            }
-        };
-        lightboxImageContainerEl.appendChild(img);
-    });
-
     lightboxModalEl.classList.remove('hidden');
     lightboxModalEl.classList.add('visible');
     document.body.style.overflow = 'hidden'; // body 스크롤 방지
-    addSwipeListeners();
+
+    // 라이트박스 열릴 때 현재, 이전, 다음 이미지 로드
+    loadLightboxImage(currentImageIndex);
     updateImageCounter();
+
+    // 초기 transform 설정 (애니메이션 없이)
+    // 현재 이미지가 중앙에 오도록 초기 위치 설정 (이전 이미지의 너비만큼 왼쪽으로 이동)
+    lightboxImageContainerEl.style.transition = 'none';
+    lightboxImageContainerEl.style.transform = `translateX(-${window.innerWidth}px)`;
+
+    // 다음 프레임에서 transition 활성화하여 이후 슬라이드에 애니메이션 적용
+    requestAnimationFrame(() => {
+        lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out';
+        isLightboxTransitioning = false; // 로딩 및 초기 위치 설정 완료
+    });
+
+    addSwipeListeners();
 }
 
 function closeLightbox() {
@@ -182,30 +276,42 @@ function closeLightbox() {
 }
 
 /**
- * 갤러리 이미지 슬라이드 전환 (컨테이너 이동)
+ * 갤러리 이미지 슬라이드 전환
  * @param {string} direction 'next' 또는 'prev'
  */
 function navigateLightbox(direction) {
     if (isLightboxTransitioning) return; // 애니메이션 중복 방지
     isLightboxTransitioning = true;
 
-    let newIndex = currentImageIndex;
     if (direction === 'next') {
-        newIndex = (currentImageIndex + 1) % galleryImages.length;
-    } else {
-        newIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        // 다음 이미지로 이동하는 애니메이션 (컨테이너를 왼쪽으로 2칸 이동)
+        lightboxImageContainerEl.style.transform = `translateX(-${window.innerWidth * 2}px)`;
+    } else { // 'prev'
+        // 이전 이미지로 이동하는 애니메이션 (컨테이너를 오른쪽으로 0칸 이동)
+        lightboxImageContainerEl.style.transform = `translateX(0px)`;
     }
-    currentImageIndex = newIndex;
-
-    // 컨테이너 이동
-    lightboxImageContainerEl.style.transform = `translateX(-${currentImageIndex * 100}%)`;
-    updateImageCounter();
-
-    // 트랜지션 완료 대기 후 플래그 해제
-    // (CSS transition 시간 0.3s와 동일하게)
+    
+    // 트랜지션이 완료될 시간을 기다린 후, 새 이미지 로드 및 위치 초기화
     setTimeout(() => {
-        isLightboxTransitioning = false;
-    }, 300);
+        if (direction === 'next') {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        } else { // 'prev'
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        }
+        updateImageCounter();
+
+        // 새로운 이미지들(이전, 현재, 다음)을 로드하고 배치
+        loadLightboxImage(currentImageIndex);
+        
+        // 위치를 초기화하여 (현재 이미지가 다시 중앙에 오도록)
+        // 트랜지션을 일시 비활성화하고 위치를 설정한 뒤 다시 활성화
+        lightboxImageContainerEl.style.transition = 'none';
+        lightboxImageContainerEl.style.transform = `translateX(-${window.innerWidth}px)`;
+        requestAnimationFrame(() => {
+            lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out';
+            isLightboxTransitioning = false;
+        });
+    }, 300); // CSS transition 시간 0.3s와 동일하게
 }
 
 
@@ -256,22 +362,20 @@ function handleTouchStart(e) {
 }
 
 function handleTouchMove(e) {
-    if (!isDragging) return;
+    if (!isDragging || isLightboxTransitioning) return;
     touchCurrentX = e.changedTouches[0].screenX;
     const deltaX = touchCurrentX - touchStartX;
-
-    // 현재 슬라이드 위치를 기준으로 드래그에 따라 실시간으로 컨테이너 이동
-    const currentTranslateX = -currentImageIndex * 100; // 현재 이미지의 % 위치
-    lightboxImageContainerEl.style.transform = `translateX(${currentTranslateX + (deltaX / window.innerWidth) * 100}%)`;
+    // 현재 이미지의 기준 위치(window.innerWidth만큼 왼쪽으로 이동된 상태)에서 드래그 양만큼 추가 이동
+    lightboxImageContainerEl.style.transform = `translateX(calc(-${window.innerWidth}px + ${deltaX}px))`;
 }
 
 function handleTouchEnd() {
-    if (!isDragging) return;
+    if (!isDragging || isLightboxTransitioning) return;
     isDragging = false;
-    // 트랜지션 다시 활성화
-    lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out';
-
     const deltaX = touchCurrentX - touchStartX;
+
+    // 트랜지션 다시 활성화 (스와이프 애니메이션에 사용)
+    lightboxImageContainerEl.style.transition = 'transform 0.3s ease-out';
 
     if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
         if (deltaX > 0) { // 오른쪽으로 스와이프 (이전 사진)
@@ -280,8 +384,12 @@ function handleTouchEnd() {
             navigateLightbox('next');
         }
     } else {
-        // 임계값 미달 시 원래 위치로 복귀 (애니메이션 적용)
-        lightboxImageContainerEl.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+        // 임계값 미달 시 원래 위치(현재 이미지가 중앙)로 복귀 (애니메이션 적용)
+        lightboxImageContainerEl.style.transform = `translateX(-${window.innerWidth}px)`;
+        // 애니메이션 완료 후 isLightboxTransitioning 플래그를 해제해야 다른 동작이 가능해집니다.
+        setTimeout(() => {
+             isLightboxTransitioning = false;
+        }, 300);
     }
     touchStartX = 0;
     touchCurrentX = 0;
@@ -290,7 +398,8 @@ function handleTouchEnd() {
 // Lightbox 이미지 컨테이너에 터치 이벤트 리스너를 추가/제거하는 함수
 function addSwipeListeners() {
     lightboxImageContainerEl.addEventListener('touchstart', handleTouchStart, { passive: true });
-    lightboxImageContainerEl.addEventListener('touchmove', handleTouchMove, { passive: false }); // passive: false로 변경하여 preventDefault 가능성 열어둠
+    // touchmove에서 preventDefault를 사용할 수 있도록 passive: false로 설정
+    lightboxImageContainerEl.addEventListener('touchmove', handleTouchMove, { passive: false }); 
     lightboxImageContainerEl.addEventListener('touchend', handleTouchEnd);
 }
 
@@ -317,15 +426,6 @@ function revealOnScroll() {
         if (!element.classList.contains('visible') && isInViewport(element)) {
             element.classList.add('visible');
         }
-    });
-}
-
-function go_navi() {
-    Kakao.Navi.start({
-        name: '전주 향교',
-        x: 35.812774378501416,
-        y: 127.15711520010265,
-        coordType: 'wgs84',
     });
 }
 
@@ -373,4 +473,8 @@ window.addEventListener("DOMContentLoaded", () => {
     // 스크롤 리빌 초기 실행 및 이벤트 리스너 등록
     revealOnScroll();
     window.addEventListener('scroll', revealOnScroll);
+
+    // 첫 사용자 상호작용 리스너 등록 (클릭 또는 터치)
+    document.addEventListener('click', handleFirstUserInteraction, { once: true });
+    document.addEventListener('touchstart', handleFirstUserInteraction, { once: true });
 });

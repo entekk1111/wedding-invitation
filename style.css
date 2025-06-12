@@ -136,19 +136,26 @@ body {
 
 /* Lightbox 내부 이미지 컨테이너 스타일 */
 #lightboxImageContainer {
+    display: flex; /* Flexbox 활성화 */
     transition: transform 0.3s ease-out; /* 부드러운 슬라이드 전환 */
     will-change: transform;
 }
 
-#lightboxImageContainer img {
-    min-width: 100%; /* 각 이미지가 부모 컨테이너의 100% 폭을 차지하도록 */
-    max-width: 100%;
+#lightboxImageContainer > div {
+    flex-shrink: 0;
+    width: 100%; /* 각 이미지 컨테이너는 뷰포트 너비 */
     height: 100%;
-    object-fit: contain; /* 이미지 비율 유지하며 공간에 맞춤 */
-    flex-shrink: 0; /* flex 아이템이 줄어들지 않도록 */
-    /* Lightbox 배경이 흰색이므로 이미지 border-radius를 추가할 수도 있습니다. */
-    /* border-radius: 8px; */
+    display: flex;
+    justify-content: center; /* 이미지를 가운데 정렬 (선택 사항) */
+    align-items: center; /* 이미지를 가운데 정렬 (선택 사항) */
 }
+
+#lightboxImageContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 이미지 비율 유지하며 공간에 맞춤 */
+}
+
 
 #closeLightbox {
     font-size: 2rem;
@@ -199,7 +206,6 @@ body {
     background-color: #e5e7eb; /* bg-gray-200 */
 }
 
-
 /* 스크롤 리빌 애니메이션 스타일 */
 .scroll-reveal {
     opacity: 0;
@@ -238,4 +244,48 @@ body {
     opacity: 1; /* 표시될 때 완전히 보이게 */
     transform: translateX(-50%) translateY(-10px); /* 약간 위로 올라오는 효과 */
     visibility: visible;
+}
+
+
+/* 배경 음악 텍스트 사라지는 애니메이션 */
+@keyframes shrinkAndFade {
+    0% {
+        max-width: 150px; /* 초기 너비 (문구와 아이콘이 모두 들어가는 너비) */
+        margin-right: 0.25rem; /* mr-1에 해당하는 값 */
+        opacity: 1;
+        padding-left: 0.5rem; /* flex container의 padding-left에 맞춰 조정 */
+        padding-right: 0.5rem; /* flex container의 padding-right에 맞춰 조정 */
+    }
+    100% {
+        max-width: 0; /* 너비 0으로 줄어듦 */
+        margin-right: 0; /* 마진 제거 */
+        opacity: 0; /* 투명하게 사라짐 */
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/* 배경 음악 토글 버튼 전체의 너비가 줄어드는 애니메이션 */
+@keyframes shrinkToggleWidth {
+    0% {
+        width: auto; /* 초기 너비 (컨텐츠에 맞춰짐) */
+        padding-left: 0.5rem; /* p-2에 해당하는 값 */
+        padding-right: 0.5rem; /* p-2에 해당하는 값 */
+    }
+    100% {
+        /* 아이콘 크기 (font-size: 16px) + 양쪽 패딩 (p-2 = 8px * 2) = 32px + 12px = 44px */
+        width: 44px; /* 아이콘 크기와 패딩을 고려한 정확한 원형 너비 */
+        padding-left: 10px; /* p-2보다 조금 더 여유를 주어 원형을 더 잘 만듦 */
+        padding-right: 10px; /* p-2보다 조금 더 여유를 주어 원형을 더 잘 만듦 */
+    }
+}
+
+/* musicText에 애니메이션 적용 */
+#musicText.hide-animation {
+    animation: shrinkAndFade 0.5s ease-out forwards; /* 0.5초 동안 실행, 최종 상태 유지 */
+}
+
+/* musicToggle (전체 div)에 애니메이션 적용 */
+#musicToggle.hide-animation {
+    animation: shrinkToggleWidth 0.5s ease-out forwards; /* 0.5초 동안 실행, 최종 상태 유지 */
 }
