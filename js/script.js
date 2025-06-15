@@ -26,6 +26,7 @@ const nextImageBtn = document.getElementById('nextImage');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const imageCounterEl = document.getElementById('imageCounter');
 const copySuccessModalEl = document.getElementById('copySuccessModal');
+const copyMessageTextEl = document.getElementById('copyMessageText'); // 메시지 텍스트를 표시할 요소
 const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
 
 // 배경 음악 관련 DOM 요소
@@ -434,10 +435,20 @@ function revealOnScroll() {
 document.querySelectorAll('.copy-button').forEach(button => {
     button.addEventListener('click', async () => {
         const textToCopy = button.dataset.copyText;
+        const copyType = button.dataset.copyType; // data-copy-type 속성 가져오기
 
         try {
             await navigator.clipboard.writeText(textToCopy);
 
+            // 메시지 텍스트 동적 설정
+            if (copyType === '계좌') {
+                copyMessageTextEl.textContent = '계좌가 복사되었습니다.';
+            } else if (copyType === '주소') {
+                copyMessageTextEl.textContent = '주소가 복사되었습니다.';
+            } else {
+                copyMessageTextEl.textContent = '복사되었습니다.'; // 기본 메시지
+            }
+            
             // 모달 표시
             copySuccessModalEl.classList.add('show');
 
@@ -464,7 +475,8 @@ document.querySelectorAll('.copy-button').forEach(button => {
 });
 
 /**
- * 계좌 정보 표시/숨김 기능 (버튼 클릭 방식) - 'hidden' 클래스 토글
+ * 계좌 정보 표시/숨김 기능 (버튼 클릭 방식) - 아코디언 애니메이션 적용
+ * 남편/신부 계좌 정보가 동시에 열릴 수 있도록 수정되었습니다.
  */
 document.querySelectorAll('.account-toggle-btn').forEach(button => {
     button.addEventListener('click', () => {
@@ -472,16 +484,43 @@ document.querySelectorAll('.account-toggle-btn').forEach(button => {
         const targetElement = document.getElementById(targetId); // account-details div
         const toggleIcon = button.querySelector('.toggle-icon');
 
-        // 현재 클릭된 계좌 정보 토글
-        targetElement.classList.toggle('hidden'); // hidden 클래스 토글 (보이기/숨기기)
-        button.classList.toggle('active'); // 버튼 active 클래스 토글 (아이콘 회전용)
-        toggleIcon.classList.toggle('active'); // 아이콘 active 클래스 토글 (회전)
+        // 요소가 현재 열려 있는지 (즉, 'show' 클래스를 가지고 있는지) 확인
+        const isShowing = targetElement.classList.contains('show');
+
+        if (isShowing) {
+            // 현재 열려 있다면 닫기 (애니메이션)
+            targetElement.classList.remove('show');
+            button.classList.remove('active');
+            toggleIcon.classList.remove('active');
+            // 애니메이션 완료 후 'hidden' 클래스 추가하여 완전히 공간 차지하지 않도록
+            setTimeout(() => {
+                targetElement.classList.add('hidden');
+            }, 500); // CSS transition 시간 (0.5s)과 동일하게
+        } else {
+            // 현재 닫혀 있다면 열기 (애니메이션)
+            targetElement.classList.remove('hidden'); // hidden 클래스 먼저 제거 (display: block으로 전환)
+            // 브라우저가 hidden 클래스 제거를 인식하도록 짧은 시간 대기 후 show 클래스 추가
+            requestAnimationFrame(() => {
+                targetElement.classList.add('show'); // show 클래스 추가 (max-height, opacity 트랜지션 시작)
+                button.classList.add('active'); // 버튼 활성화 (아이콘 회전)
+                toggleIcon.classList.add('active'); // 아이콘 회전
+            });
+        }
     });
 });
 
 
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
+    // 초기 로드 시 모든 account-details를 숨김 상태로 시작
+    // HTML에 hidden 클래스가 이미 적용되어 있으므로 다시 처리할 필요는 없음
+    // 다만, JS로 show/hide를 제어할 것이므로, 필요하다면 초기 상태를 명확히 하는 로직은 유용할 수 있음
+    // 아래 코드는 HTML에 hidden이 잘 적용되어 있다면 제거해도 무방
+    document.querySelectorAll('.account-details').forEach(detail => {
+        detail.classList.add('hidden'); // hidden 클래스 추가하여 숨김
+        detail.classList.remove('show'); // 혹시 모를 초기 'show' 상태 제거
+    });
+
     startTypingProcess(); // 페이지 로드 시 첫 번째 텍스트 타이핑 시작
     displayGallery(); // 갤러리 표시 (초기 9개)
 

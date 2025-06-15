@@ -112,7 +112,6 @@ body {
     transition: background-color 0.3s ease-in-out; /* transition duration-300 ease-in-out */
     cursor: pointer;
     text-align: center; /* 아이콘과 텍스트 가운데 정렬 */
-    border: none; /* 버튼 기본 테두리 제거 */
     background-color: transparent; /* 배경색 투명하게 */
 }
 
@@ -290,13 +289,51 @@ body {
     animation: shrinkToggleWidth 0.5s ease-out forwards; /* 0.5초 동안 실행, 최종 상태 유지 */
 }
 
-/* 계좌 정보 표시/숨김을 위한 CSS (JavaScript에서 'hidden' 클래스를 토글) */
-/* .account-details에는 transition, max-height, opacity 등의 애니메이션 관련 스타일을 제거합니다. */
-/* Tailwind의 hidden 클래스가 display: none;을 적용하여 즉시 숨깁니다. */
+/* 계좌 정보 표시/숨김을 위한 CSS (아코디언 스타일) */
+/* 중요: 'hidden' 클래스는 Tailwind의 display: none;을 적용하므로,
+   애니메이션을 원한다면 JavaScript에서 'hidden' 클래스를 제거한 후
+   'show' 클래스를 토글해야 합니다. */
+.account-details {
+    overflow: hidden;
+    max-height: 0; /* 초기 숨김 상태 */
+    opacity: 0; /* 초기 투명 */
+    /* transition을 max-height와 opacity에 모두 적용하여 부드러운 애니메이션 */
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.5s ease-in-out;
+    margin-top: 0; /* 숨겨진 상태에서 마진 없음 */
+}
+
+.account-details.show {
+    max-height: 300px; /* 콘텐츠 길이에 따라 충분히 큰 값으로 설정. 필요시 조절. */
+    opacity: 1; /* 보일 때 투명도 1 */
+    margin-top: 0.5rem; /* 보일 때 마진 추가 */
+}
+
+/* 토글 아이콘 회전 */
 .account-toggle-btn .toggle-icon {
     transition: transform 0.3s ease-in-out;
 }
 
 .account-toggle-btn.active .toggle-icon {
     transform: rotate(180deg);
+}
+
+/* 계좌 정보 각 항목 스타일 */
+.account-item {
+    padding-top: 0.5rem; /* py-2 */
+    padding-bottom: 0.5rem; /* py-2 */
+    font-size: 0.875rem; /* text-sm */
+    line-height: 1.25rem; /* leading-5 */
+}
+
+.account-item .account-number {
+    font-weight: 500; /* font-medium */
+    color: #4b5563; /* text-gray-700 (기존 텍스트 색상) */
+}
+
+/* 계좌 정보 구분선 스타일 */
+.account-divider {
+    border-top: 1px solid #d1d5db; /* border-gray-300 */
+    margin-top: 0.5rem; /* mt-2 */
+    margin-bottom: 0.5rem; /* mb-2 */
+    opacity: 0.7; /* 약간 투명하게 */
 }
