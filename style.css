@@ -136,8 +136,9 @@ body {
 /* Lightbox 내부 이미지 컨테이너 스타일 */
 #lightboxImageContainer {
     display: flex; /* Flexbox 활성화 */
+    /* will-change: transform 대신 translateZ(0)로 하드웨어 가속 강제 적용 */
+    transform: translateZ(0); /* 하드웨어 가속 강제 적용 */
     transition: transform 0.3s ease-out; /* 부드러운 슬라이드 전환 */
-    will-change: transform;
 }
 
 #lightboxImageContainer > div {
@@ -147,6 +148,8 @@ body {
     display: flex;
     justify-content: center; /* 이미지를 가운데 정렬 (선택 사항) */
     align-items: center; /* 이미지를 가운데 정렬 (선택 사항) */
+    /* will-change: transform 대신 translateZ(0)로 하드웨어 가속 강제 적용 */
+    transform: translateZ(0); /* 하드웨어 가속 강제 적용 */
 }
 
 #lightboxImageContainer img {

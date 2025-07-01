@@ -67,20 +67,6 @@ function hideMusicTextWithAnimation() {
     }
 }
 
-// 갤러리 라이트박스 더블 탭 줌 방지
-let lastTapTimeBody = 0; // 바디 전용 시간 변수
-document.body.addEventListener('touchend', function(e) {
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - lastTapTimeBody;
-
-    // 더블 탭으로 간주되는 시간 범위 (일반적으로 300ms 이내)
-    if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault(); // 기본 더블 탭 동작 방지
-    }
-    lastTapTimeBody = currentTime;
-}, { passive: false }); // `passive: false`를 사용하여 `preventDefault`가 작동하도록 함
-
-
 
 // 첫 사용자 상호작용 (클릭/터치) 시 음악 재생 시도
 function handleFirstUserInteraction() {
@@ -424,6 +410,28 @@ function removeSwipeListeners() {
 }
 
 
+// 1. 갤러리 라이트박스 더블 탭 줌 방지 (기존 코드 유지)
+// 2. 화면 전체 더블 탭 줌 방지 (추가 및 정리)
+let lastTapTime = 0; // 통합된 마지막 탭 시간 변수
+
+document.addEventListener('touchend', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTapTime;
+
+    // 더블 탭으로 간주되는 시간 범위 (일반적으로 300ms 이내)
+    if (tapLength < 300 && tapLength > 0) {
+        // 더블 탭 이벤트의 기본 동작 방지
+        e.preventDefault(); 
+    }
+    lastTapTime = currentTime;
+}, { passive: false }); // preventDefault()를 위해 passive: false 설정
+
+// dblclick 이벤트도 명시적으로 막음 (데스크탑 브라우저 및 일부 모바일 에뮬레이션)
+document.addEventListener('dblclick', function(e) {
+    e.preventDefault();
+}, { passive: false });
+
+
 /**
  * 스크롤 리빌 애니메이션 JavaScript
  */
@@ -447,7 +455,8 @@ function revealOnScroll() {
  * 주소/계좌번호 복사 기능 (모달 메시지 사용)
  */
 document.querySelectorAll('.copy-button').forEach(button => {
-    button.addEventListener('click', async () => {
+    button.addEventListener('click', async (e) => { // 이벤트 객체 e 추가
+        e.stopPropagation(); // 이벤트 버블링 중단
         const textToCopy = button.dataset.copyText;
         const copyType = button.dataset.copyType; // data-copy-type 속성 가져오기
 
@@ -493,7 +502,8 @@ document.querySelectorAll('.copy-button').forEach(button => {
  * 남편/신부 계좌 정보가 동시에 열릴 수 있도록 수정되었습니다.
  */
 document.querySelectorAll('.account-toggle-btn').forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (e) => { // 이벤트 객체 e 추가
+        e.stopPropagation(); // 이벤트 버블링 중단
         const targetId = button.dataset.target;
         const targetElement = document.getElementById(targetId); // account-details div
         const toggleIcon = button.querySelector('.toggle-icon');
@@ -527,6 +537,9 @@ document.querySelectorAll('.account-toggle-btn').forEach(button => {
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
     // 초기 로드 시 모든 account-details를 숨김 상태로 시작
+    // HTML에 hidden 클래스가 이미 적용되어 있으므로 다시 처리할 필요는 없음
+    // 하지만, 아코디언 JS 로직이 실행될 때 show/hidden 클래스 상태를 확실히 하기 위해
+    // DOMContentLoaded 시점에 명시적으로 hidden을 추가하는 것이 안전합니다.
     document.querySelectorAll('.account-details').forEach(detail => {
         detail.classList.add('hidden'); // hidden 클래스 추가하여 숨김
         detail.classList.remove('show'); // 혹시 모를 초기 'show' 상태 제거
@@ -540,8 +553,6 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('scroll', revealOnScroll);
 
     // 첫 사용자 상호작용 리스너 등록 (클릭 또는 터치)
-    // 이 부분에서 document.body에 대한 dblclick/touchend 방지 로직이 먼저 실행되어야 함.
-    // 하지만 이미 위에서 touchend 리스너를 body에 추가했으므로 중복 제거 또는 순서 조정 필요 없음.
     document.addEventListener('click', handleFirstUserInteraction, { once: true });
     document.addEventListener('touchstart', handleFirstUserInteraction, { once: true });
 });
