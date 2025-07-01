@@ -7,7 +7,7 @@ const TYPING_SPEED = 120; // ms
 const FADE_OUT_DURATION = 700; // ms
 const TEXT_TRANSITION_DELAY = 1000; // ms (첫 텍스트 완료 후 다음 텍스트까지 대기 시간)
 
-const GALLERY_IMAGE_COUNT = 21; // 전체 갤러리 이미지 개수
+const GALLERY_IMAGE_COUNT = 27; // 전체 갤러리 이미지 개수
 const INITIAL_DISPLAY_COUNT = 9; // 처음 보여줄 썸네일 개수
 const EXPANDED_DISPLAY_COUNT = GALLERY_IMAGE_COUNT; // '더보기' 클릭 시 보여줄 썸네일 개수
 
@@ -66,6 +66,20 @@ function hideMusicTextWithAnimation() {
         }, 500); // CSS 애니메이션 시간과 동일하게
     }
 }
+
+// 갤러리 라이트박스 더블 탭 줌 방지
+let lastTapTimeBody = 0; // 바디 전용 시간 변수
+document.body.addEventListener('touchend', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTapTimeBody;
+
+    // 더블 탭으로 간주되는 시간 범위 (일반적으로 300ms 이내)
+    if (tapLength < 300 && tapLength > 0) {
+        e.preventDefault(); // 기본 더블 탭 동작 방지
+    }
+    lastTapTimeBody = currentTime;
+}, { passive: false }); // `passive: false`를 사용하여 `preventDefault`가 작동하도록 함
+
 
 
 // 첫 사용자 상호작용 (클릭/터치) 시 음악 재생 시도
@@ -513,9 +527,6 @@ document.querySelectorAll('.account-toggle-btn').forEach(button => {
 // 페이지 로드 완료 시 실행
 window.addEventListener("DOMContentLoaded", () => {
     // 초기 로드 시 모든 account-details를 숨김 상태로 시작
-    // HTML에 hidden 클래스가 이미 적용되어 있으므로 다시 처리할 필요는 없음
-    // 다만, JS로 show/hide를 제어할 것이므로, 필요하다면 초기 상태를 명확히 하는 로직은 유용할 수 있음
-    // 아래 코드는 HTML에 hidden이 잘 적용되어 있다면 제거해도 무방
     document.querySelectorAll('.account-details').forEach(detail => {
         detail.classList.add('hidden'); // hidden 클래스 추가하여 숨김
         detail.classList.remove('show'); // 혹시 모를 초기 'show' 상태 제거
@@ -529,6 +540,8 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('scroll', revealOnScroll);
 
     // 첫 사용자 상호작용 리스너 등록 (클릭 또는 터치)
+    // 이 부분에서 document.body에 대한 dblclick/touchend 방지 로직이 먼저 실행되어야 함.
+    // 하지만 이미 위에서 touchend 리스너를 body에 추가했으므로 중복 제거 또는 순서 조정 필요 없음.
     document.addEventListener('click', handleFirstUserInteraction, { once: true });
     document.addEventListener('touchstart', handleFirstUserInteraction, { once: true });
 });
